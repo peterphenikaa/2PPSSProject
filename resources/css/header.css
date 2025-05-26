@@ -1,0 +1,117 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&display=swap');
+
+:root {
+  --primary-red: #dc2626;
+  --hover-red: #b91c1c;
+  --dark-gray: #1f2937;
+  --light-gray: #f3f4f6;
+}
+
+.header {
+  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.03em;
+  background: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.nav-link {
+  position: relative;
+  padding-bottom: 4px;
+  color: var(--dark-gray);
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--primary-red);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-red);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.dropdown-menu {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.group:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.cart-badge,
+.wishlist-badge {
+  font-size: 0.65rem;
+  min-width: 1.25rem;
+  background: var(--primary-red);
+  color: white;
+}
+#mobile-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+#mobile-menu.show {
+  max-height: 1000px;
+}
+
+.mobile-products-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.mobile-products-menu.show {
+  max-height: 500px;
+}
+
+.rotate-icon {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+@media (max-width: 767px) {
+  .header-icons img {
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+  
+  .dropdown-menu {
+    width: 100%;
+    left: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .nav-link {
+    font-size: 1.125rem;
+  }
+  
+  .header-icons img {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+}

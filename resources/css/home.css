@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&display=swap');
+
+/* Áp dụng font cho toàn trang hoặc từng phần */
+body,
+.banner-title,
+.section-title,
+.banner-desc,
+.brand-card span {
+    font-family: 'Barlow Condensed', Arial, Helvetica, sans-serif;
+}
+
+.main-banner {
+    position: relative;
+    height: 650px;
+    /* tăng chiều cao */
+    overflow: hidden;
+    margin-bottom: 4rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.main-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.85) contrast(1.05);
+    transition: filter 0.3s;
+}
+
+.main-banner:hover img {
+    filter: brightness(0.95) contrast(1.1);
+}
+
+.banner-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(0, 0, 0, 0.65) 40%, rgba(236, 72, 153, 0.25) 100%);
+    z-index: 1;
+}
+
+.banner-content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.banner-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+    letter-spacing: 1px;
+    margin-bottom: 1.2rem;
+    animation: fade-in-down 1s cubic-bezier(.4, 0, .2, 1) both;
+}
+
+.banner-desc {
+    font-size: 1.25rem;
+    color: #f3f4f6;
+    margin-bottom: 2rem;
+    animation: fade-in-up 1.2s cubic-bezier(.4, 0, .2, 1) both;
+}
+
+.banner-cta {
+    display: inline-block;
+    padding: 0.85rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(90deg, #3b82f6 0%, #ec4899 100%);
+    border-radius: 999px;
+    box-shadow: 0 4px 16px 0 rgba(236, 72, 153, 0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: fade-in-up 1.4s cubic-bezier(.4, 0, .2, 1) both;
+}
+
+.banner-cta:hover {
+    transform: scale(1.06);
+    box-shadow: 0 8px 32px 0 rgba(236, 72, 153, 0.25);
+    background: linear-gradient(90deg, #ec4899 0%, #3b82f6 100%);
+}
+
+@keyframes fade-in-down {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Brand card styles */
+.brand-card {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border-radius: 12px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.brand-card:hover {
+    transform: translateY(-8px) scale(1.04);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.05);
+    border-color: #ec4899;
+}
+
+.brand-img {
+    height: 80px;
+    width: 100%;
+    object-fit: contain;
+    filter: grayscale(30%);
+    transition: filter 0.3s ease;
+}
+
+.brand-card:hover .brand-img {
+    filter: grayscale(0%);
+}
+
+/* Section title nổi bật */
+.section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+    font-size: 1.6rem;
+    /* nhỏ hơn */
+    font-weight: 800;
+    color: #222;
+    /* màu đen */
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+    text-shadow: none;
+    letter-spacing: 1px;
+}
+
+.section-title:after {
+    display: none;
+    /* bỏ gạch dưới */
+}
+
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+    .main-banner {
+        height: 450px;
+    }
+
+    .banner-title {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .main-banner {
+        height: 260px;
+        margin-bottom: 2rem;
+        border-radius: 1rem;
+    }
+
+    .banner-title {
+        font-size: 1.2rem;
+    }
+
+    .banner-desc {
+        font-size: 1rem;
+    }
+
+    .banner-cta {
+        font-size: 0.95rem;
+        padding: 0.7rem 1.5rem;
+    }
+
+    .brands-section {
+        padding: 2rem 0;
+    }
+
+    .brand-img {
+        height: 60px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+}
