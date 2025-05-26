@@ -10,12 +10,22 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    public function run(): void
+      public function run(): void
     {
+        // Admin
+        DB::table('users')->insert([
+            'name' => 'Admin',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('admin123'),
+            'role' => 'admin',
+        ]);
+
+        // User thường
         DB::table('users')->insert([
             'name' => 'Thanh Binh',
             'email' => 'thanhbinh2k5@gmail.com',
             'password' => Hash::make('12345678'),
+            'role' => 'user',
         ]);
     }
 }

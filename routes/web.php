@@ -2,16 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\RegiseterController;
+use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', function () {
     return view('layouts.layouts');
 });
 
 Route::get('/login',
-    [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm']
+    [LoginController::class, 'showLoginForm']
 )->name('login');
 Route::post('/login',
-    [App\Http\Controllers\Auth\LoginController::class, 'checkLogin']
+    [LoginController::class, 'checkLogin']
 )->name('login.post');
 
 Route::post('/logout', function () {
@@ -22,12 +25,24 @@ Route::post('/logout', function () {
 })->name('logout');
 
 Route::get('/register',
-    [App\Http\Controllers\Auth\RegiseterController::class, 'showRegistrationForm']
+    [RegiseterController::class, 'showRegistrationForm']
 )->name('register');
 Route::post('/register',
-    [App\Http\Controllers\Auth\RegiseterController::class, 'checkRegister']
+    [RegiseterController::class, 'checkRegister']
 )->name('register.post');
 
 Route::get('/forgot-password',
-    [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm']
+    [ForgotPasswordController::class, 'showLinkRequestForm']
 )->name('password.request');
+
+Route::post('/forgot-password',
+    [ForgotPasswordController::class, 'checkEmail']
+)->name('password.checkemail');
+
+Route::get('/reset-password',
+    [ForgotPasswordController::class, 'showResetPassword']
+)->name('reset.password');
+
+Route::post('/reset-password',
+    [ForgotPasswordController::class, 'resetPassword']
+)->name('password.update');
