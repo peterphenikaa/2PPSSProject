@@ -91,8 +91,7 @@
                 <div class="relative group">
                     <button
                         class="p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200 focus:outline-none">
-                        <img src="{{ asset('images/icon_search.png') }}" alt="Search"
-                            class="h-5 w-5 md:h-6 md:w-6">
+                        <img src="{{ asset('images/icon_search.png') }}" alt="Search" class="h-5 w-5 md:h-6 md:w-6">
                     </button>
                     <div
                         class="absolute right-0 top-full mt-2 w-64 bg-white rounded-md shadow-lg z-50 border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
@@ -101,8 +100,7 @@
                                 <input type="text" name="q" placeholder="Tìm giày, thương hiệu..."
                                     class="w-full border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm">
                                 <button type="submit" class="absolute right-3 top-2.5">
-                                    <img src="{{ asset('images/icon_search.png') }}" alt="Search"
-                                        class="h-4 w-4">
+                                    <img src="{{ asset('images/icon_search.png') }}" alt="Search" class="h-4 w-4">
                                 </button>
                             </div>
                         </form>
@@ -112,22 +110,51 @@
                 <!-- Wishlist -->
                 <a href="/wishlist"
                     class="p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200 relative">
-                    <img src="{{ asset('images/icon_favourite.png') }}" alt="Yêu thích"
-                        class="h-5 w-5 md:h-6 md:w-6">
-                
+                    <img src="{{ asset('images/icon_favourite.png') }}" alt="Yêu thích" class="h-5 w-5 md:h-6 md:w-6">
+
                 </a>
 
                 <!-- Cart -->
                 <a href="/cart" class="p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200 relative">
                     <img src="{{ asset('images/icon_cart.png') }}" alt="Giỏ hàng" class="h-5 w-5 md:h-6 md:w-6">
-                    
+
                 </a>
 
                 <!-- Account -->
-                <a href="{{ route('login') }}"
-                    class="p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200 hidden md:block">
-                    <img src="{{ asset('images/person.png') }}" alt="Tài khoản" class="h-5 w-5 md:h-6 md:w-6">
-                </a>
+                <div class="relative group hidden md:block">
+                    <button
+                        class="p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200 focus:outline-none">
+                        <img src="{{ asset('images/person.png') }}" alt="Tài khoản" class="h-5 w-5 md:h-6 md:w-6">
+                    </button>
+
+                    <div
+                        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
+                        @auth
+                            <div class="p-4 border-b">
+                                <p class="text-sm text-gray-700">Xin chào,</p>
+                                <p class="font-semibold text-gray-900">{{ Auth::user()->name }}</p>
+                            </div>
+                            <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                Đăng xuất
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                @csrf
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                Đăng nhập
+                            </a>
+                            <a href="{{ route('register') }}"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                Đăng ký
+                            </a>
+                        @endauth
+                    </div>
+                </div>
+
 
                 <!-- Mobile Menu Button -->
                 <button id="mobile-menu-button"
@@ -172,7 +199,8 @@
                         <div class="grid grid-cols-2 gap-2">
                             <a href="/brands/nike" class="text-sm text-gray-700 hover:text-red-600">Nike</a>
                             <a href="/brands/adidas" class="text-sm text-gray-700 hover:text-red-600">Adidas</a>
-                            <a href="/brands/newbalance" class="text-sm text-gray-700 hover:text-red-600">New balance</a>
+                            <a href="/brands/newbalance" class="text-sm text-gray-700 hover:text-red-600">New
+                                balance</a>
                             <a href="/brands/puma" class="text-sm text-gray-700 hover:text-red-600">Puma</a>
                             <a href="/brands/converse" class="text-sm text-gray-700 hover:text-red-600">Converse</a>
                             <a href="/brands/vans" class="text-sm text-gray-700 hover:text-red-600">Vans</a>
