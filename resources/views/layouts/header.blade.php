@@ -98,7 +98,7 @@
                 
                 <!-- Account -->
                 <a href="/account" class="p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200 hidden md:block">
-                    <img src="{{ asset('assets/icons/person.png') }}" alt="Tài khoản" class="h-5 w-5 md:h-6 md:w-6">
+                    <img src="{{ asset('images/user.png') }}" alt="Tài khoản" class="h-5 w-5 md:h-6 md:w-6">
                 </a>
 
                 <!-- Mobile Menu Button -->
