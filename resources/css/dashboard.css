@@ -1,0 +1,160 @@
+:root {
+    --primary: #4f46e5;
+    --primary-light: #6366f1;
+    --secondary: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --dark: #1f2937;
+    --light: #f9fafb;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    min-height: 100vh;
+    overflow: hidden;
+    background-color: #f3f4f6;
+}
+
+/* Sidebar cố định - ĐÃ CHUYỂN SANG MÀU TRẮNG */
+.sidebar {
+    width: 250px;
+    background: white; /* Đổi từ gradient xanh sang trắng */
+    color: #1f2937; /* Đổi màu chữ sang tối */
+    height: 100vh;
+    position: fixed;
+    overflow-y: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Thêm shadow để tách biệt */
+    border-right: 1px solid #e5e7eb; /* Thêm border nhẹ */
+}
+
+/* Main content area */
+.main-content {
+    margin-left: 250px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Header cố định */
+.header {
+    background: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Vùng nội dung chính có scroll */
+.content-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    background-color: #f9fafb; 
+}
+
+/* Card thống kê */
+.stat-card {
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    height: 100%;
+}
+
+/* Bảng đơn hàng */
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.order-table th {
+    background: #f9fafb;
+    padding: 0.75rem 1.5rem;
+    text-align: left;
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.order-table td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    white-space: nowrap;
+}
+
+.order-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Badge trạng thái */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+/* Đảm bảo chiều cao biểu đồ */
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+.sidebar a {
+    color: #4b5563; /* Màu chữ menu */
+    transition: all 0.2s ease;
+}
+
+.sidebar a:hover {
+    background-color: #f3f4f6; /* Màu hover nhạt */
+    color: #111827;
+}
+
+.sidebar .material-icons-round {
+    color: #6b7280; /* Màu icon */
+}
+
+.sidebar a:hover .material-icons-round {
+    color: #111827; /* Màu icon khi hover */
+}
+
+/* Active menu item */
+.sidebar a.bg-gray-100 {
+    background-color: #f3f4f6 !important;
+    color: #111827 !important;
+}
+
+.sidebar a.bg-gray-100 .material-icons-round {
+    color: #111827 !important;
+}
