@@ -12,7 +12,19 @@ class ProductController
 {
     public function product()
     {
-        $products = Product::all();
-        return view('admin.product',compact('products'));
+        $products = Product::all()->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'sizes' => json_decode($product->available_sizes, true),
+                'gender' => $product->gender,
+                'brand' => $product->brand,
+                'category' => $product->category,
+                'colorway' => $product->colorway,
+                'stock' => $product->stock,
+            ];
+        })->toArray();
+        return view('admin.product', compact('products'));
     }
 }

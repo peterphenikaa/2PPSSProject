@@ -14,8 +14,7 @@
     <x-sidebar />
 
     <!-- Main Content -->
-    <div class="main-content ml-64 p-6">
-        <!-- Header -->
+    <div class="main-content ml-64 p-6 ">
         <!-- Header -->
         <header class="mb-8">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -63,7 +62,7 @@
             </div>
         </header>
         <!-- Recent Orders -->
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 mt-4">
             <div class="px-6 py-4 flex items-center justify-between border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Danh sách đơn hàng</h2>
                 <a href="/admin/orders" class="action-link text-indigo-600">

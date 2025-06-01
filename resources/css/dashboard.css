@@ -18,19 +18,17 @@ body {
     background-color: #f3f4f6;
 }
 
-/* Sidebar cố định - ĐÃ CHUYỂN SANG MÀU TRẮNG */
 .sidebar {
     width: 250px;
-    background: white; /* Đổi từ gradient xanh sang trắng */
-    color: #1f2937; /* Đổi màu chữ sang tối */
+    background: white; 
+    color: #1f2937; 
     height: 100vh;
     position: fixed;
     overflow-y: auto;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Thêm shadow để tách biệt */
-    border-right: 1px solid #e5e7eb; /* Thêm border nhẹ */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-right: 1px solid #e5e7eb; 
 }
 
-/* Main content area */
 .main-content {
     margin-left: 250px;
     flex: 1;
@@ -39,8 +37,6 @@ body {
     height: 100vh;
     overflow: hidden;
 }
-
-/* Header cố định */
 .header {
     background: white;
     padding: 1rem 2rem;
