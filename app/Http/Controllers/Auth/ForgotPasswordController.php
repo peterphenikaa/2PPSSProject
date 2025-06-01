@@ -13,6 +13,7 @@ class ForgotPasswordController extends Controller
     public function __construct()
     {
         // Có thể thêm middleware nếu muốn
+        
     }
 
     // Hiển thị form nhập email

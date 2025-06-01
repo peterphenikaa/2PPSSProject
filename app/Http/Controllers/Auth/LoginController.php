@@ -1,12 +1,8 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-
-
 class LoginController
 {
     public function __construct() {}

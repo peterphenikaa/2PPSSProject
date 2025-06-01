@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CreateProductController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
@@ -56,5 +57,6 @@ Route::middleware('auth')->get('/admin/dashboard', [DashboardController::class, 
 Route::middleware('auth')->get('/admin/orders', [OrderController::class, 'order'])->name('admin.order');
 Route::middleware('auth')->get('/admin/products', [ProductController::class, 'product'])->name('admin.product');
 Route::middleware('auth')->get('/admin/users', [UserController::class, 'user'])->name('admin.user');
-
+Route::middleware('auth')->get('/admin/products/create',[CreateProductController::class,'createproduct'])->name('admin.product.create');
+Route::middleware('auth')->post('/admin/products/create',[CreateProductController::class,'createproduct'])->name('admin.products.create');
 

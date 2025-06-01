@@ -26,8 +26,6 @@
                 <a href="/products" class="banner-cta">Mua ngay</a>
             </div>
         </section>
-
-        <!-- Các thương hiệu -->
         <section class="brands-section py-16 bg-gray-50">
             <div class="container mx-auto px-4">
                 <h3 class="text-center section-title">THƯƠNG HIỆU NỔI BẬT</h3>

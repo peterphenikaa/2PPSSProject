@@ -1,0 +1,150 @@
+.main-content {
+    background-color: #f9fafb;
+    padding: 2rem;
+    overflow-y: auto !important;
+    min-height: 100vh;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 0.75rem; 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
+    overflow: hidden; 
+}
+
+.order-table th {
+    background-color: #f8fafc; 
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-weight: 600;
+    color: #1e293b; 
+    border-bottom: 1px solid #e2e8f0;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.order-table td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+    background: #fff;
+    vertical-align: middle; 
+    transition: all 0.2s ease;
+}
+
+.order-table tr:last-child td {
+    border-bottom: none;
+}
+
+.order-table tr:hover td {
+    background-color: #f1f5f9; 
+}
+
+/* Style cho các nút action */
+.order-table .action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.order-table .edit-btn {
+    color: #3b82f6;
+    background-color: #e0f2fe;
+}
+
+.order-table .edit-btn:hover {
+    background-color: #bae6fd;
+}
+
+.order-table .delete-btn {
+    color: #ef4444;
+    background-color: #fee2e2;
+}
+
+.order-table .delete-btn:hover {
+    background-color: #fecaca;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    line-height: 1;
+}
+.action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #3b82f6;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.action-link:hover {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.action-link .material-icons-round {
+    font-size: 1.1em;
+}
+header {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    margin-bottom: 1.5rem;
+}
+/* Header icons */
+.header-icons {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    color: #64748b;
+    transition: all 0.2s ease;
+}
+
+.header-icons:hover {
+    color: #3b82f6;
+    background-color: #e0f2fe;
+    transform: translateY(-1px);
+}
+
+.create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.create-btn:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.create-btn .material-icons-round {
+    font-size: 1.25em;
+}
