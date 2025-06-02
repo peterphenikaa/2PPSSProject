@@ -62,7 +62,8 @@ class DatabaseSeeder extends Seeder
             'brand' => 'Adidas',
             'category' => 'Thể thao',
         ]);
-
+        
+        
 
         // Seed order
         $order1 = Order::create([

@@ -58,8 +58,8 @@
                 </div>
             </div>
         </section>
-        
     </main>
+    
     @include('layouts.footer')
 </body>
 

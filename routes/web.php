@@ -60,3 +60,9 @@ Route::middleware('auth')->get('/admin/users', [UserController::class, 'user'])-
 Route::middleware('auth')->get('/admin/products/create',[CreateProductController::class,'createproduct'])->name('admin.product.create');
 Route::middleware('auth')->post('/admin/products/create',[CreateProductController::class,'createproduct'])->name('admin.products.create');
 
+// giao diện sản phẩm 
+// Route chi tiết sản phẩm: dùng /product (số ít)
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('products.show');
+
+// Route danh sách lọc sản phẩm
+Route::get('/products/{filter}', [ProductController::class, 'filter'])->name('products.filter');

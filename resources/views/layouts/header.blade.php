@@ -28,25 +28,15 @@
                         <div class="grid grid-cols-2 gap-4 p-4">
                             <!-- Category Column -->
                             <div>
-                                <h3 class="font-bold text-gray-900 mb-2 pb-1 border-b">DANH MỤC</h3>
-                                <a href="/products/men"
-                                    class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">GIÀY
-                                    NAM</a>
-                                <a href="/products/women"
-                                    class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">GIÀY
-                                    NỮ</a>
-                                <a href="/products/sports"
-                                    class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">GIÀY
-                                    THỂ THAO</a>
-                                <a href="/products/sneakers"
-                                    class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">SNEAKERS</a>
-                                <a href="/new-arrivals"
-                                    class="block px-3 py-2  hover:bg-gray-50 hover:text-red-600 font-medium text-red-500">HÀNG
-                                    MỚI VỀ</a>
-                                <a href="/best-sellers"
-                                    class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">BÁN
-                                    CHẠY</a>
-                            </div>
+    <h3 class="font-bold text-gray-900 mb-2 pb-1 border-b">DANH MỤC</h3>
+    <a href="{{ route('products.filter', 'men') }}" class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">GIÀY NAM</a>
+    <a href="{{ route('products.filter', 'women') }}" class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">GIÀY NỮ</a>
+    <a href="{{ route('products.filter', 'sports') }}" class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">GIÀY THỂ THAO</a>
+    <a href="{{ route('products.filter', 'sneakers') }}" class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">SNEAKERS</a>
+    <a href="{{ route('products.filter', 'new-arrivals') }}" class="block px-3 py-2 hover:bg-gray-50 hover:text-red-600 font-medium text-red-500">HÀNG MỚI VỀ</a>
+    <a href="{{ route('products.filter', 'best-sellers') }}" class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">BÁN CHẠY</a>
+</div>
+
 
                             <!-- Brands Column -->
                             <div>
