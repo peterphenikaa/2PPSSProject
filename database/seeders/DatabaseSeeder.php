@@ -21,8 +21,6 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('admin123'),
             'role' => 'admin',
         ]);
-
-        // User thường => dùng insertGetId để lấy ID
         $userId1 = DB::table('users')->insertGetId([
             'name' => 'Thanh Binh',
             'email' => 'thanhbinh2k5@gmail.com',
