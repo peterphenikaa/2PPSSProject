@@ -15,6 +15,7 @@ class Product extends Model
         'additional_images',
         'available_sizes',
         'price',
+        'stock',
         'colorway',
         'style_code',
         'gender',

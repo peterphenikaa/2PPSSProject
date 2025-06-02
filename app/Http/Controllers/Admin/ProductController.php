@@ -27,73 +27,78 @@ class ProductController
         })->toArray();
         return view('admin.product', compact('products'));
     }
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect()->back()->with('success', 'Xóa sản phẩm thành công!');
+    }
     public function filter($filter, Request $request)
-{
-    // 1. Lọc sản phẩm theo loại (men, women, etc)
-    switch ($filter) {
-        case 'men':
-            $query = Product::where('gender', 'male')->orWhere('gender', 'unisex');
-            break;
-        case 'women':
-            $query = Product::where('gender', 'female')->orWhere('gender', 'unisex');
-            break;
-        case 'sports':
-            $query = Product::where('category', 'like', '%Thể thao%');
-            break;
-        case 'new-arrivals':
-            $query = Product::orderBy('created_at', 'desc');
-            break;
-        case 'best-sellers':
-            $query = Product::orderBy('stock', 'asc');
-            break;
-        case 'sneakers':
-        default:
-            $query = Product::query();
-            break;
-    }
+    {
+        switch ($filter) {
+            case 'men':
+                $query = Product::where('gender', 'male')->orWhere('gender', 'unisex');
+                break;
+            case 'women':
+                $query = Product::where('gender', 'female')->orWhere('gender', 'unisex');
+                break;
+            case 'sports':
+                $query = Product::where('category', 'like', '%Thể thao%');
+                break;
+            case 'new-arrivals':
+                $query = Product::orderBy('created_at', 'desc');
+                break;
+            case 'best-sellers':
+                $query = Product::orderBy('stock', 'asc');
+                break;
+            case 'sneakers':
+            default:
+                $query = Product::query();
+                break;
+        }
 
-    // 2. Áp dụng filter từ request
-    if ($request->filled('name')) {
-        $query->whereIn('name', $request->input('name'));
-    }
+        // 2. Áp dụng filter từ request
+        if ($request->filled('name')) {
+            $query->whereIn('name', $request->input('name'));
+        }
 
-    if ($request->filled('gender')) {
-        $query->whereIn('gender', $request->input('gender'));
-    }
+        if ($request->filled('gender')) {
+            $query->whereIn('gender', $request->input('gender'));
+        }
 
-    if ($request->filled('colorway')) {
-        $query->whereIn('colorway', $request->input('colorway'));
-    }
+        if ($request->filled('colorway')) {
+            $query->whereIn('colorway', $request->input('colorway'));
+        }
 
-    if ($request->filled('price')) {
-        $query->where('price', '<=', $request->input('price'));
-    }
+        if ($request->filled('price')) {
+            $query->where('price', '<=', $request->input('price'));
+        }
 
-    if ($request->filled('size')) {
-        $sizes = $request->input('size');
-        $query->where(function ($q) use ($sizes) {
-            foreach ($sizes as $size) {
-                $q->orWhereJsonContains('available_sizes', $size);
-            }
-        });
-    }
+        if ($request->filled('size')) {
+            $sizes = $request->input('size');
+            $query->where(function ($q) use ($sizes) {
+                foreach ($sizes as $size) {
+                    $q->orWhereJsonContains('available_sizes', $size);
+                }
+            });
+        }
 
-    // 3. Lấy danh sách sản phẩm
-    $products = $query->get();
+        // 3. Lấy danh sách sản phẩm
+        $products = $query->get();
 
-    // 4. Lấy dữ liệu lọc sidebar từ tất cả sản phẩm
-    $all = Product::all();
-    $names = $all->pluck('name')->unique()->sort()->values();
-    $genders = $all->pluck('gender')->unique()->sort()->values();
-    $colorways = $all->pluck('colorway')->unique()->sort()->values();
-    $sizes = $all->pluck('available_sizes')->filter()->flatten()->unique()->sort()->values();
+        // 4. Lấy dữ liệu lọc sidebar từ tất cả sản phẩm
+        $all = Product::all();
+        $names = $all->pluck('name')->unique()->sort()->values();
+        $genders = $all->pluck('gender')->unique()->sort()->values();
+        $colorways = $all->pluck('colorway')->unique()->sort()->values();
+        $sizes = $all->pluck('available_sizes')->filter()->flatten()->unique()->sort()->values();
 
-    return view('shop.products', compact('products', 'filter', 'names', 'genders', 'colorways', 'sizes'));
+        return view('shop.products', compact('products', 'filter', 'names', 'genders', 'colorways', 'sizes'));
     }
     public function show($id)
-{
-    $product = Product::findOrFail($id);
-    return view('shop.product-items', compact('product'));
-}
-
+    {
+        $product = Product::findOrFail($id);
+        return view('shop.product-items', compact('product'));
+    }
 }
