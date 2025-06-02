@@ -55,8 +55,9 @@
         <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 mt-4">
             <div class="px-6 py-4 flex items-center justify-between border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Danh sách sản phẩm</h2>
-                <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors">
-                    <a href="{{ route('admin.product.create') }}">
+                <button
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors">
+                    <a href="{{ route('admin.products.create.form') }}">
                         <span class="material-icons-round mr-2 align-middle" style="font-size: 22px;">add</span>
                         <span class="align-middle">Tạo</span>
                     </a>
@@ -100,13 +101,22 @@
                                 <td>{{ $product['stock'] }}</td>
                                 <td class="text-center">
                                     <button class="text-indigo-600 hover:text-indigo-800 transition-colors">
-                                        <span class="material-icons-round">edit</span>
+                                        <a href="{{ route('admin.products.edit', $product['id']) }}"
+                                            class="text-indigo-600 hover:text-indigo-800 transition-colors">
+                                            <span class="material-icons-round">edit</span>
+                                        </a>
                                     </button>
                                 </td>
                                 <td class="text-center">
-                                    <button class="text-red-600 hover:text-red-800 transition-colors">
-                                        <span class="material-icons-round">delete</span>
-                                    </button>
+                                    <form action="{{ route('admin.products.destroy', $product['id']) }}" method="POST"
+                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="text-red-600 hover:text-red-800 transition-colors">
+                                            <span class="material-icons-round">delete</span>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @empty
