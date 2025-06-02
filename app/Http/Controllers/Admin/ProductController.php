@@ -27,7 +27,6 @@ class ProductController
         })->toArray();
         return view('admin.product', compact('products'));
     }
-<<<<<<< Updated upstream
     public function filter($filter, Request $request)
 {
     // 1. Lọc sản phẩm theo loại (men, women, etc)
@@ -97,13 +96,4 @@ class ProductController
     return view('shop.product-items', compact('product'));
 }
 
-=======
-    public function destroy($id)
-    {
-        $product = Product::findOrFail($id);
-        $product->delete();
-
-        return redirect()->back()->with('success', 'Xóa sản phẩm thành công!');
-    }
->>>>>>> Stashed changes
 }
