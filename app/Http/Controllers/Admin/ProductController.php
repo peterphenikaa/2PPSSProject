@@ -17,7 +17,7 @@ class ProductController
                 'id' => $product->id,
                 'name' => $product->name,
                 'price' => $product->price,
-                'sizes' => json_decode($product->available_sizes, true),
+                'sizes' => $product->available_sizes,
                 'gender' => $product->gender,
                 'brand' => $product->brand,
                 'category' => $product->category,
@@ -27,6 +27,7 @@ class ProductController
         })->toArray();
         return view('admin.product', compact('products'));
     }
+<<<<<<< Updated upstream
     public function filter($filter, Request $request)
 {
     // 1. Lọc sản phẩm theo loại (men, women, etc)
@@ -96,4 +97,13 @@ class ProductController
     return view('shop.product-items', compact('product'));
 }
 
+=======
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect()->back()->with('success', 'Xóa sản phẩm thành công!');
+    }
+>>>>>>> Stashed changes
 }
