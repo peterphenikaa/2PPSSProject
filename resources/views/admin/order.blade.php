@@ -35,24 +35,16 @@
                 <!-- Action buttons and user menu -->
                 <div class="flex items-center gap-4">
                     <!-- Search bar -->
-                    <div class="relative hidden md:block">
-                        <input type="text" placeholder="Tìm kiếm đơn hàng..."
+                    <form action="{{ route('admin.orders.search') }}" method="GET" class="relative hidden md:block">
+                        <input type="text" name="q" value="{{ request('q') }}" placeholder="Tìm kiếm đơn hàng..."
                             class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 w-64">
                         <span class="material-icons-round absolute left-3 top-2.5 text-gray-400">search</span>
-                    </div>
+                    </form>
 
                     <!-- Action buttons -->
                     <div class="flex items-center gap-2">
-                        <!-- Notification -->
-                        <button
-                            class="relative p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors">
-                            <span class="material-icons-round">notifications</span>
-                            <span
-                                class="absolute top-0 right-0 h-2.5 w-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-                        </button>
-
                         <!-- Help -->
-                        <button
+                        <button id="helpBtnOrder" type="button"
                             class="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors">
                             <span class="material-icons-round">help_outline</span>
                         </button>
@@ -133,4 +125,39 @@
         </div>
     </div>
 </body>
+
+<!-- Modal hướng dẫn sử dụng -->
+<div id="helpModalOrder" class="fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-40"
+    style="display:none;">
+    <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative animate-fade-in mx-auto mt-24">
+        <button id="closeHelpModalOrder" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700">
+            <span class="material-icons-round">close</span>
+        </button>
+        <h2 class="text-xl font-bold mb-2 text-indigo-700 flex items-center gap-2">
+            <span class="material-icons-round">help_outline</span> Hướng dẫn sử dụng
+        </h2>
+        <ul class="list-disc pl-5 text-gray-700 space-y-1 mb-2">
+            <li>Tìm kiếm đơn hàng theo mã, tên khách, email hoặc trạng thái bằng ô tìm kiếm phía trên.</li>
+            <li>Nhấn vào mã đơn hàng để xem chi tiết đơn hàng.</li>
+            <li>Trạng thái đơn hàng được hiển thị màu sắc khác nhau để dễ phân biệt.</li>
+        </ul>
+        <div class="text-gray-500 text-sm mt-2">
+            Nếu cần hỗ trợ thêm, vui lòng liên hệ quản trị viên hệ thống.<br>
+            <span class="font-semibold">Hotline:</span> 0123 456 789<br>
+            <span class="font-semibold">Email:</span> support@2pss.vn
+        </div>
+    </div>
+</div>
+
+<script>
+    const helpBtnOrder = document.getElementById('helpBtnOrder');
+    const helpModalOrder = document.getElementById('helpModalOrder');
+    const closeHelpModalOrder = document.getElementById('closeHelpModalOrder');
+    helpBtnOrder.addEventListener('click', () => helpModalOrder.style.display = 'flex');
+    closeHelpModalOrder.addEventListener('click', () => helpModalOrder.style.display = 'none');
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') helpModalOrder.style.display = 'none';
+    });
+</script>
+
 </html>

@@ -1,4 +1,4 @@
-<footer class="bg-white text-gray-700 font-sans border-t border-gray-200">
+<footer class="bg-white text-gray-700 font-sans border-t border-gray-200" style="font-family: 'Rubik', Arial, Helvetica, sans-serif;">
     <div class="container mx-auto px-4 py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <!-- Về Chúng Tôi -->

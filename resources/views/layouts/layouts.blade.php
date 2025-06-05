@@ -11,7 +11,15 @@
     @vite('resources/css/footer.css')
     @vite('resources/js/app.js')
     @vite('resources/css/home.css')
-</head>     
+    <!-- Google Fonts: Rubik -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html,
+        body {
+            font-family: 'Rubik', sans-serif !important;
+        }
+    </style>
+</head>
 
 <body>
     @include('layouts.header')
@@ -58,8 +66,26 @@
                 </div>
             </div>
         </section>
+        <section class="featured-products py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h3 class="section-title text-center mb-8">SẢN PHẨM MỚI</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    @foreach ($newProducts as $product)
+                        <div class="border rounded p-4 shadow hover:shadow-md transition">
+                            <a href="{{ route('products.show', $product->id) }}">
+                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
+                                    class="w-full h-48 object-cover rounded">
+                                <h4 class="mt-2 font-semibold text-gray-800">{{ $product->name }}</h4>
+                                <p class="text-gray-500 text-sm">{{ number_format($product->price) }} đ</p>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
     </main>
-    
+
     @include('layouts.footer')
 </body>
 

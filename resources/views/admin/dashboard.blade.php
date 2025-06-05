@@ -21,15 +21,35 @@
             <div class="flex items-center justify-between">
                 <h1 class="text-2xl font-bold text-gray-800">Tổng quan hệ thống</h1>
                 <div class="flex items-center space-x-4">
-                    <button class="p-2 rounded-full hover:bg-gray-100">
-                        <span class="material-icons-round">notifications</span>
-                    </button>
-                    <button class="p-2 rounded-full hover:bg-gray-100">
+                    <button id="helpBtnDashboard" type="button" class="p-2 rounded-full hover:bg-gray-100" style="cursor:pointer">
                         <span class="material-icons-round">help_outline</span>
                     </button>
                 </div>
             </div>
         </header>
+
+        <!-- Modal hướng dẫn sử dụng -->
+        <div id="helpModalDashboard" class="fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-40" style="display:none;">
+            <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative animate-fade-in mx-auto mt-24">
+                <button id="closeHelpModalDashboard" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700">
+                    <span class="material-icons-round">close</span>
+                </button>
+                <h2 class="text-xl font-bold mb-2 text-indigo-700 flex items-center gap-2">
+                    <span class="material-icons-round">help_outline</span> Hướng dẫn sử dụng Dashboard
+                </h2>
+                <ul class="list-disc pl-5 text-gray-700 space-y-1 mb-2">
+                    <li>Xem tổng quan số lượng đơn hàng, doanh thu, sản phẩm, khách hàng ở các thẻ thống kê phía trên.</li>
+                    <li>Xem biểu đồ doanh thu và phân loại đơn hàng ở phần biểu đồ.</li>
+                    <li>Xem danh sách đơn hàng gần đây ở cuối trang, nhấn "Chi tiết" để xem thông tin đơn hàng.</li>
+                    <li>Có thể truy cập nhanh các trang quản lý khác qua sidebar bên trái.</li>
+                </ul>
+                <div class="text-gray-500 text-sm mt-2">
+                    Nếu cần hỗ trợ thêm, vui lòng liên hệ quản trị viên hệ thống.<br>
+                    <span class="font-semibold">Hotline:</span> 0123 456 789<br>
+                    <span class="font-semibold">Email:</span> support@2pss.vn
+                </div>
+            </div>
+        </div>
 
         <!-- Content -->
         <div class="content-wrapper">
@@ -223,6 +243,17 @@
                 }
             }
         });
+
+        const helpBtnDashboard = document.getElementById('helpBtnDashboard');
+        const helpModalDashboard = document.getElementById('helpModalDashboard');
+        const closeHelpModalDashboard = document.getElementById('closeHelpModalDashboard');
+        if (helpBtnDashboard && helpModalDashboard && closeHelpModalDashboard) {
+            helpBtnDashboard.addEventListener('click', () => helpModalDashboard.style.display = 'flex');
+            closeHelpModalDashboard.addEventListener('click', () => helpModalDashboard.style.display = 'none');
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') helpModalDashboard.style.display = 'none';
+            });
+        }
     </script>
 </body>
 </html>

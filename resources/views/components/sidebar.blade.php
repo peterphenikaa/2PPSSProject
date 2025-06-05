@@ -22,7 +22,7 @@
             class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 font-medium">
             <span class="material-icons-round mr-3 text-gray-500">group</span> Khách hàng
         </a>
-        <a href="/admin/users"
+        <a href="/admin/admins"
             class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-800 font-medium">
             <span class="material-icons-round mr-3 text-gray-500">admin_panel_settings</span> Quản trị viên
         </a>

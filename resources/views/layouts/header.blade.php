@@ -1,4 +1,4 @@
-<header class="header bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
+<header class="header bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100" style="font-family: 'Rubik', Arial, Helvetica, sans-serif;">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-16">
             <!-- Logo -->

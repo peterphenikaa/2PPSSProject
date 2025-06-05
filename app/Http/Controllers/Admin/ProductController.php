@@ -101,4 +101,25 @@ class ProductController
         $product = Product::findOrFail($id);
         return view('shop.product-items', compact('product'));
     }
+    public function homepageProducts()
+    {
+        $newProducts = Product::latest()->take(8)->get(); // Lấy 8 sản phẩm mới nhất
+        return view('layouts.layouts', compact('newProducts'));
+    }
+    public function search(Request $request)
+    {
+        $q = $request->input('q');
+        $products = Product::when($q, function ($query) use ($q) {
+            $query->where('name', 'like', "%$q%")
+                ->orWhere('brand', 'like', "%$q%")
+                ->orWhere('category', 'like', "%$q%")
+                ->orWhere('colorway', 'like', "%$q%")
+                ->orWhere('id', 'like', "%$q%") ;
+        })
+        ->latest()
+        ->paginate(10);
+        return view('admin.product', [
+            'products' => $products,
+        ]);
+    }
 }

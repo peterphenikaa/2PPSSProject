@@ -1,26 +1,23 @@
 <?php
 
-use App\Http\Controllers\Admin\CreateProductController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\UpdateProductController;
-use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\RegiseterController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Models\Product;
+use App\Http\Controllers\Admin\ProductController;
 
+// Route public và auth
 Route::get('/', function () {
     return view('layouts.layouts');
 });
 
-Route::get('/login',
+Route::get(
+    '/login',
     [LoginController::class, 'showLoginForm']
 )->name('login');
-Route::post('/login',
+Route::post(
+    '/login',
     [LoginController::class, 'checkLogin']
 )->name('login.post');
 
@@ -31,45 +28,36 @@ Route::post('/logout', function () {
     return redirect('/');
 })->name('logout');
 
-Route::get('/register',
+Route::get(
+    '/register',
     [RegiseterController::class, 'showRegistrationForm']
 )->name('register');
-Route::post('/register',
+Route::post(
+    '/register',
     [RegiseterController::class, 'checkRegister']
 )->name('register.post');
 
-Route::get('/forgot-password',
+Route::get(
+    '/forgot-password',
     [ForgotPasswordController::class, 'showLinkRequestForm']
 )->name('password.request');
 
-Route::post('/forgot-password',
+Route::post(
+    '/forgot-password',
     [ForgotPasswordController::class, 'checkEmail']
 )->name('password.checkemail');
 
-Route::get('/reset-password',
+Route::get(
+    '/reset-password',
     [ForgotPasswordController::class, 'showResetPassword']
 )->name('reset.password');
 
-Route::post('/reset-password',
+Route::post(
+    '/reset-password',
     [ForgotPasswordController::class, 'resetPassword']
 )->name('password.update');
 
-Route::middleware('auth')->get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
-Route::middleware('auth')->get('/admin/orders', [OrderController::class, 'order'])->name('admin.order');
-Route::middleware('auth')->get('/admin/products', [ProductController::class, 'product'])->name('admin.product');
-Route::middleware('auth')->get('/admin/users', [UserController::class, 'user'])->name('admin.user');
-Route::middleware('auth')->prefix('admin/products')->controller(CreateProductController::class)->group(function () {
-    Route::get('/create', 'createProduct')->name('admin.products.create.form');
-    Route::post('/create', 'formProduct')->name('admin.products.create');
-});
-Route::delete('/admin/products/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
-
-// Route show form sửa sản phẩm
-Route::middleware('auth')->get('/admin/products/{id}/edit', [UpdateProductController::class, 'edit'])->name('admin.products.edit');
-// Route cập nhật sản phẩm
-Route::middleware('auth')->put('/admin/products/{id}', [UpdateProductController::class, 'update'])->name('admin.products.update');
-
-
-// Route danh sách lọc sản phẩm
+// Route sản phẩm cho khách
 Route::get('/products/{filter}', [ProductController::class, 'filter'])->name('products.filter');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/', [ProductController::class, 'homepageProducts'])->name('home');

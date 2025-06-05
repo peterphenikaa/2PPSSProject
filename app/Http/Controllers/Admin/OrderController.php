@@ -26,4 +26,23 @@ class OrderController
             'recentOrders'
         ));
     }
+    public function search(Request $request)
+    {
+        $q = $request->input('q');
+        $orders = Order::with('user')
+            ->when($q, function ($query) use ($q) {
+                $query->where('id', 'like', "%$q%")
+                    ->orWhereHas('user', function ($userQuery) use ($q) {
+                        $userQuery->where('name', 'like', "%$q%")
+                            ->orWhere('email', 'like', "%$q%") ;
+                    })
+                    ->orWhere('status', 'like', "%$q%") ;
+            })
+            ->latest()
+            ->paginate(10);
+        return view('admin.order', [
+            'recentOrders' => $orders,
+            // ...truyền thêm các biến khác nếu cần...
+        ]);
+    }
 }
