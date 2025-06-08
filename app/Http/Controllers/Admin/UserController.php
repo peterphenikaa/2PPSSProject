@@ -25,13 +25,22 @@ class UserController
     {
         $q = $request->input('q');
         $users = User::where('role', 'user')
-            ->when($q, function ($query) use ($q) {
+            ->where(function ($query) use ($q) {
                 $query->where('id', 'like', "%$q%")
                     ->orWhere('name', 'like', "%$q%")
                     ->orWhere('email', 'like', "%$q%") ;
             })
             ->latest()
-            ->paginate(10);
+            ->get()
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'created_at' => optional($user->created_at)->format('Y-m-d H:i:s'),
+                    'updated_at' => optional($user->updated_at)->format('Y-m-d H:i:s'),
+                ];
+            })->toArray();
         return view('admin.user', [
             'users' => $users,
         ]);

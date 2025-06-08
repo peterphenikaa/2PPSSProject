@@ -83,7 +83,7 @@
                     </a>
                 </button>
             </div>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto" style="max-height: 70vh; overflow-y: auto;">
                 <table class="order-table">
                     <thead>
                         <tr>

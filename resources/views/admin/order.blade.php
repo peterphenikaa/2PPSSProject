@@ -62,7 +62,7 @@
                     <span class="material-icons-round ml-1">chevron_right</span>
                 </a>
             </div>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto" style="max-height: 70vh; overflow-y: auto;">
                 <table class="order-table">
                     <thead>
                         <tr>

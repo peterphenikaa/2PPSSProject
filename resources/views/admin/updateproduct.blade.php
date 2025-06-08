@@ -7,11 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Tạo sản phẩm mới - 2PSS Sneakers Admin</title>
     @vite(['resources/css/app.css', 'resources/css/createproduct.css', 'resources/css/dashboard.css'])
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-50" style="font-family: 'Rubik', sans-serif;">
     <x-sidebar />
     <!-- Main Content -->
     <div class="main-content">
@@ -94,15 +94,17 @@
                         <h2 class="section-title"><span class="section-icon material-icons-round">image</span>Hình ảnh
                             sản phẩm</h2>
                         <div class="space-y-4">
-                            @if ($product->image)
-                                <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $product->image) }}" class="h-24 rounded">
-                                </div>
-                            @endif
+                            <div id="current-image-product" class="mb-2 flex flex-col items-center">
+                                @if ($product->image)
+                                    <img src="{{ asset('storage/' . $product->image) }}" class="h-24 rounded shadow border">
+                                    <div class="text-xs text-gray-600 mt-1">Ảnh đã tải lên: {{ basename($product->image) }}</div>
+                                @endif
+                            </div>
                             <div>
                                 <label for="image" class="form-label">Ảnh mới (nếu muốn thay)</label>
-                                <input id="image" name="image" type="file" class="form-input">
+                                <input id="image" name="image" type="file" class="form-input" accept="image/*" onchange="previewUpdateProductImage(event)">
                                 <p class="text-xs text-gray-500">PNG, JPG, JPEG tối đa 5MB</p>
+                                <div id="preview-image-update-product" class="mt-2 flex justify-center"></div>
                             </div>
                         </div>
                     </div>
@@ -175,5 +177,28 @@
 
     </div>
 </body>
+
+<script>
+function previewUpdateProductImage(event) {
+    const preview = document.getElementById('preview-image-update-product');
+    const current = document.getElementById('current-image-product');
+    preview.innerHTML = '';
+    if (current) current.style.display = 'none';
+    const file = event.target.files[0];
+    if (file) {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.className = 'mx-auto rounded shadow border mt-2';
+        img.style.maxWidth = '120px';
+        img.style.maxHeight = '120px';
+        preview.appendChild(img);
+        // Hiển thị tên file đã chọn
+        const fileName = document.createElement('div');
+        fileName.className = 'text-xs text-gray-600 mt-1';
+        fileName.innerText = 'Đã chọn: ' + file.name;
+        preview.appendChild(fileName);
+    }
+}
+</script>
 
 </html>

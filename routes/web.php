@@ -6,11 +6,11 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\RegiseterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Shop\BlogController as ShopBlogController;
 
 // Route public và auth
-Route::get('/', function () {
-    return view('layouts.layouts');
-});
+// Route trang chủ: truyền newProducts cho layout
+Route::get('/', [ProductController::class, 'homepageProducts'])->name('home');
 
 Route::get(
     '/login',
@@ -60,4 +60,6 @@ Route::post(
 // Route sản phẩm cho khách
 Route::get('/products/{filter}', [ProductController::class, 'filter'])->name('products.filter');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('products.show');
-Route::get('/', [ProductController::class, 'homepageProducts'])->name('home');
+
+// Route trang blog
+Route::get('/blogs', [ShopBlogController::class, 'index'])->name('shop.blog.index');

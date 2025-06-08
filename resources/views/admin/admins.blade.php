@@ -24,7 +24,7 @@
                     </div>
                     <h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
                         <span class="material-icons-round text-indigo-600">admin_panel_settings</span>
-                        Quản Trị Viên
+                        Quản trị viên
                     </h1>
                     <p class="text-gray-600 mt-1 text-sm md:text-base">Xem và quản lý tất cả quản trị viên của cửa hàng
                     </p>
@@ -72,7 +72,7 @@
             <div class="px-6 py-4 flex items-center justify-between border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Danh sách quản trị viên</h2>
             </div>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto" style="max-height: 70vh; overflow-y: auto;">
                 <table class="order-table w-full">
                     <thead>
                         <tr class="bg-gray-100 text-gray-700">
@@ -98,16 +98,7 @@
                                         class="text-indigo-600 hover:text-indigo-800 mr-2">
                                         <span class="material-icons-round">edit</span>
                                     </a>
-                                    <form
-                                        action="{{ route('admin.admins.destroy', $admin['id']) }}"
-                                        method="POST" style="display:inline-block"
-                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa quản trị viên này?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800">
-                                            <span class="material-icons-round">delete</span>
-                                        </button>
-                                    </form>
+                                    <!-- Xóa admin đã bị loại bỏ -->
                                 </td>
                             </tr>
                         @endforeach

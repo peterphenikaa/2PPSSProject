@@ -36,11 +36,7 @@
                 </div>
                 <div class="flex items-center gap-4">
                     <div class="flex items-center gap-2">
-                        <button class="relative p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-all shadow-sm">
-                            <span class="material-icons-round">notifications</span>
-                            <span class="absolute top-0 right-0 h-2.5 w-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-                        </button>
-                        <button class="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-all shadow-sm">
+                        <button id="helpBtnCreateProduct" class="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-all shadow-sm">
                             <span class="material-icons-round">help_outline</span>
                         </button>
                     </div>
@@ -98,11 +94,12 @@
                                         <div class="flex text-sm text-gray-600 justify-center">
                                             <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none">
                                                 <span>Tải ảnh lên</span>
-                                                <input id="image" name="image" type="file" class="sr-only" required>
+                                                <input id="image" name="image" type="file" class="sr-only" accept="image/*" onchange="previewProductImage(event)" required>
                                             </label>
                                             <p class="pl-1">hoặc kéo thả tại đây</p>
                                         </div>
                                         <p class="text-xs text-gray-500">PNG, JPG, JPEG tối đa 5MB</p>
+                                        <div id="preview-image-product" class="mt-2 flex justify-center"></div>
                                     </div>
                                 </div>
                             </div>
@@ -165,6 +162,63 @@
                 </div>
             </div>
         </form>
+
+        <!-- Modal hướng dẫn sử dụng -->
+        <div id="helpModalCreateProduct" class="fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-40" style="display:none;">
+            <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative animate-fade-in mx-auto mt-24">
+                <button id="closeHelpModalCreateProduct" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700">
+                    <span class="material-icons-round">close</span>
+                </button>
+                <h2 class="text-xl font-bold mb-2 text-indigo-700 flex items-center gap-2">
+                    <span class="material-icons-round">help_outline</span> Hướng dẫn tạo sản phẩm
+                </h2>
+                <ul class="list-disc pl-5 text-gray-700 space-y-1 mb-2">
+                    <li>Điền đầy đủ thông tin sản phẩm: tên, mô tả, giá, số lượng, thương hiệu, danh mục, màu sắc, kích cỡ.</li>
+                    <li>Chọn ảnh đại diện sản phẩm (bắt buộc).</li>
+                    <li>Nhấn "Lưu sản phẩm" để hoàn tất tạo mới.</li>
+                    <li>Các trường bắt buộc sẽ có dấu hiệu cảnh báo nếu bỏ trống.</li>
+                </ul>
+                <div class="text-gray-500 text-sm mt-2">
+                    Nếu cần hỗ trợ thêm, vui lòng liên hệ quản trị viên hệ thống.<br>
+                    <span class="font-semibold">Hotline:</span> 0123 456 789<br>
+                    <span class="font-semibold">Email:</span> support@2pss.vn
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        const helpBtnCreateProduct = document.getElementById('helpBtnCreateProduct');
+        const helpModalCreateProduct = document.getElementById('helpModalCreateProduct');
+        const closeHelpModalCreateProduct = document.getElementById('closeHelpModalCreateProduct');
+        if (helpBtnCreateProduct && helpModalCreateProduct && closeHelpModalCreateProduct) {
+            helpBtnCreateProduct.addEventListener('click', () => helpModalCreateProduct.style.display = 'flex');
+            closeHelpModalCreateProduct.addEventListener('click', () => helpModalCreateProduct.style.display = 'none');
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') helpModalCreateProduct.style.display = 'none';
+            });
+        }
+
+        function previewProductImage(event) {
+            const preview = document.getElementById('preview-image-product');
+            preview.innerHTML = '';
+            const file = event.target.files[0];
+            if (file) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.className = 'mx-auto rounded shadow border mt-2';
+                img.style.maxWidth = '120px';
+                img.style.maxHeight = '120px';
+                preview.appendChild(img);
+                // Hiển thị tên file đã chọn
+                const fileName = document.createElement('div');
+                fileName.className = 'text-xs text-gray-600 mt-1';
+                fileName.innerText = 'Đã chọn: ' + file.name;
+                preview.appendChild(fileName);
+            }
+            // Đảm bảo chỉ chọn 1 ảnh
+            event.target.value = event.target.value;
+        }
+    </script>
 </body>
 </html>

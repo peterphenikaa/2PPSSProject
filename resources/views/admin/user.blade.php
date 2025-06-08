@@ -80,7 +80,7 @@
             <div class="px-6 py-4 flex items-center justify-between border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Danh sách người dùng</h2>
             </div>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto" style="max-height: 70vh; overflow-y: auto;">
                 <table class="order-table w-full">
                     <thead>
                         <tr class="bg-gray-100 text-gray-700">

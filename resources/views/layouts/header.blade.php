@@ -1,4 +1,8 @@
-<header class="header bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100" style="font-family: 'Rubik', Arial, Helvetica, sans-serif;">
+@push('styles')
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+@endpush
+<header class="header bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100"
+    style="font-family: 'Rubik', Arial, Helvetica, sans-serif;">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-16">
             <!-- Logo -->
@@ -28,14 +32,23 @@
                         <div class="grid grid-cols-2 gap-4 p-4">
                             <!-- Category Column -->
                             <div>
-    <h3 class="font-bold text-gray-900 mb-2 pb-1 border-b">DANH MỤC</h3>
-    <a href="{{ route('products.filter', 'men') }}" class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">GIÀY NAM</a>
-    <a href="{{ route('products.filter', 'women') }}" class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">GIÀY NỮ</a>
-    <a href="{{ route('products.filter', 'sports') }}" class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">GIÀY THỂ THAO</a>
-    <a href="{{ route('products.filter', 'sneakers') }}" class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">SNEAKERS</a>
-    <a href="{{ route('products.filter', 'new-arrivals') }}" class="block px-3 py-2 hover:bg-gray-50 hover:text-red-600 font-medium text-red-500">HÀNG MỚI VỀ</a>
-    <a href="{{ route('products.filter', 'best-sellers') }}" class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">BÁN CHẠY</a>
-</div>
+                                <h3 class="font-bold text-gray-900 mb-2 pb-1 border-b">DANH MỤC</h3>
+                                <a href="{{ route('products.filter', 'men') }}"
+                                    class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">Giày
+                                    nam</a>
+                                <a href="{{ route('products.filter', 'women') }}"
+                                    class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">Giày
+                                    nữ</a>
+                                <a href="{{ route('products.filter', 'sports') }}"
+                                    class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">Giày
+                                    thể thao</a>
+                                <a href="{{ route('products.filter', 'sneakers') }}"
+                                    class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">Sneaker</a>
+                                <a href="{{ route('products.filter', 'new-arrivals') }}"
+                                    class="block px-3 py-2 hover:bg-gray-50 hover:text-red-600 font-medium text-red-500">Hàng mới về</a>
+                                <a href="{{ route('products.filter', 'best-sellers') }}"
+                                    class="block px-3 py-2 text-gray-800 hover:bg-gray-50 hover:text-red-600 font-medium">Bán chạy</a>
+                            </div>
 
 
                             <!-- Brands Column -->
@@ -66,7 +79,7 @@
                     MÃI</a>
 
                 <!-- Blog Link -->
-                <a href="/blog"
+                <a href="{{ route('shop.blog.index') }}"
                     class="nav-link text-gray-900 font-semibold text-lg hover:text-red-600 transition-colors duration-200">BLOG</a>
 
                 <!-- Contact Link -->
@@ -96,13 +109,6 @@
                         </form>
                     </div>
                 </div>
-
-                <!-- Wishlist -->
-                <a href="/wishlist"
-                    class="p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200 relative">
-                    <img src="{{ asset('images/icon_favourite.png') }}" alt="Yêu thích" class="h-5 w-5 md:h-6 md:w-6">
-
-                </a>
 
                 <!-- Cart -->
                 <a href="/cart" class="p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200 relative">
@@ -213,12 +219,9 @@
                 <a href="{{ route('login') }}"
                     class="block py-2 text-gray-900 font-semibold text-lg hover:text-red-600 transition-colors duration-200">TÀI
                     KHOẢN</a>
-                <a href="/wishlist"
-                    class="block py-2 text-gray-900 font-semibold text-lg hover:text-red-600 transition-colors duration-200">YÊU
-                    THÍCH (3)</a>
                 <a href="/cart"
                     class="block py-2 text-gray-900 font-semibold text-lg hover:text-red-600 transition-colors duration-200">GIỎ
-                    HÀNG (5)</a>
+                    HÀNG </a>
             </div>
 
             <!-- Mobile Search -->

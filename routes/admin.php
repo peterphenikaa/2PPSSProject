@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CreateProductController;
 use App\Http\Controllers\Admin\UpdateProductController;
+use App\Http\Controllers\Admin\BlogController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
@@ -31,4 +32,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/products/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
     Route::get('/admin/products/{id}/edit', [UpdateProductController::class, 'edit'])->name('admin.products.edit');
     Route::put('/admin/products/{id}', [UpdateProductController::class, 'update'])->name('admin.products.update');
+
+    // Blog quản trị
+    Route::prefix('blog')->group(function () {
+        Route::get('/', [BlogController::class, 'index'])->name('admin.blog.index');
+        Route::get('/create', [BlogController::class, 'create'])->name('admin.blog.create');
+        Route::post('/store', [BlogController::class, 'store'])->name('admin.blog.store');
+        Route::get('/edit/{id}', [BlogController::class, 'edit'])->name('admin.blog.edit');
+        Route::post('/update/{id}', [BlogController::class, 'update'])->name('admin.blog.update');
+        Route::delete('/delete/{id}', [BlogController::class, 'destroy'])->name('admin.blog.destroy');
+    });
 });
