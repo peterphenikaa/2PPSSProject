@@ -28,4 +28,5 @@ class Product extends Model
         'additional_images' => 'array',
         'is_featured' => 'boolean',
     ];
+    
 }

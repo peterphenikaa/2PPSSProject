@@ -98,10 +98,21 @@ class ProductController
     }
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-        return view('shop.product-items', compact('product'));
+    $product = Product::findOrFail($id);
+    
+    // Xử lý ảnh sản phẩm
+    $mainImage = trim(explode(' ', $product->image)[0]); // Lấy ảnh đầu tiên
+    $additionalImages = explode(' ', trim($product->image));
+    array_shift($additionalImages); // Bỏ ảnh đầu tiên (đã lấy làm main)
+    
+    $relatedProducts = Product::where('category', $product->category)
+                            ->where('id', '!=', $product->id)
+                            ->limit(4)
+                            ->get();
+    
+    return view('shop.product-items', compact('product', 'mainImage', 'additionalImages', 'relatedProducts'));
     }
-    public function homepageProducts()
+public function homepageProducts()
     {
         $newProducts = Product::latest()->take(8)->get(); // Lấy 8 sản phẩm mới nhất
         return view('layouts.layouts', compact('newProducts'));

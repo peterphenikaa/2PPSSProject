@@ -113,42 +113,48 @@
     <main class="bg-white">
         <!-- Product Breadcrumb -->
         <div class="border-b border-gray-200 py-4 px-6">
-            <div class="container mx-auto text-sm text-gray-600">
-                <span class="hover:text-black cursor-pointer">Trang chủ</span> / 
-                <span class="hover:text-black cursor-pointer">Nam</span> / 
-                <span class="hover:text-black cursor-pointer">Giày</span> / 
-                <span class="text-black">Nike Air Force 1 '07</span>
-            </div>
-        </div>
+    <div class="container mx-auto text-sm text-gray-600">
+        <span class="hover:text-black cursor-pointer">Trang chủ</span> / 
+        <span class="hover:text-black cursor-pointer">{{ ucfirst($product->gender) }}</span> / 
+        <span class="hover:text-black cursor-pointer">{{ $product->category }}</span> / 
+        <span class="text-black">{{ $product->name }}</span>
+    </div>
+</div>
+
 
         <!-- Product Main Section -->
         <div class="container mx-auto px-6 py-10">
             <div class="flex gap-12">
                 <!-- Product Images -->
                 <div class="w-1/2">
-                    <div class="product-gallery">
-                        <img src="{{ asset('images/customer-1.jpg') }}" alt="Nike Air Force 1 '07" loading="lazy">
-                        <img src="{{ asset('images/customer-2.jpg') }}" alt="Nike Air Force 1 '07" loading="lazy">
-                        <img src="{{ asset('images/customer-3.jpg') }}" alt="Nike Air Force 1 '07" loading="lazy">
-                        <img src="{{ asset('images/customer-4.jpg') }}" alt="Nike Air Force 1 '07" loading="lazy">
-                    </div>
-                </div>
+    <div class="product-gallery">
+        <!-- Ảnh chính -->
+        <img src="{{ asset('images/' . $mainImage) }}" alt="{{ $product->name }}" loading="lazy">
+        
+        <!-- Các ảnh phụ -->
+        @foreach($additionalImages as $image)
+            @if($image)
+                <img src="{{ asset('images/' . trim($image)) }}" alt="{{ $product->name }}" loading="lazy">
+            @endif
+        @endforeach
+    </div>
+</div>
                 
                 <!-- Product Info -->
                 <div class="w-1/2">
-                    <h1 class="text-3xl font-bold mb-2">Nike Air Force 1 '07</h1>
-                    <p class="text-gray-600 mb-4">Giày thể thao nam</p>
-                    <p class="text-2xl font-bold mb-6">2.699.000₫</p>
+                    <h1 class="text-3xl font-bold mb-2">{{ $product->name }}</h1>
+<p class="text-gray-600 mb-4">{{ $product->category }}</p>
+<p class="text-2xl font-bold mb-6">{{ number_format($product->price) }}₫</p>
                     
                     <div class="mb-8">
                         <h3 class="font-bold mb-3">Chọn size</h3>
                         <p class="text-sm text-gray-600 mb-4">Giày chạy size lớn, khuyến nghị chọn size nhỏ hơn 1 size so với bình thường</p>
                         
                         <div class="grid grid-cols-3 gap-3 mb-4">
-                            @foreach(['36', '37', '38', '39', '40', '41', '42', '43', '44'] as $size)
-                                <div class="size-option">{{ $size }}</div>
-                            @endforeach
-                        </div>
+    @foreach(json_decode($product->available_sizes, true) as $size)
+        <div class="size-option">{{ $size }}</div>
+    @endforeach
+</div>
                         
                         <button class="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition duration-200 font-medium mb-4">
                             Thêm vào giỏ hàng
@@ -207,12 +213,12 @@
                     
                     <div class="border-t border-gray-200 pt-4">
                         <p class="text-gray-700 mb-4">
-                            Thoải mái, bền bỉ và vượt thời gian - đây là đôi giày số 1 với lý do chính đáng. Thiết kế cổ điển từ những năm 60 với chất liệu da mềm mại cùng các chi tiết nổi bật, phù hợp cho cả khi bạn trên sân bóng rổ hay đi dạo phố.
-                        </p>
+    {{ $product->description }}
+</p>
                         <ul class="text-sm text-gray-600 space-y-1 mb-4">
-                            <li>Màu sắc: Trắng/Trắng</li>
-                            <li>Mã sản phẩm: CW22B8-T11</li>
-                        </ul>
+    <li>Màu sắc: {{ $product->colorway }}</li>
+    <li>Mã sản phẩm: {{ $product->id }}</li>
+</ul>
                         <a href="#" class="text-sm font-medium underline">Xem chi tiết sản phẩm</a>
                     </div>
                 </div>
@@ -311,8 +317,20 @@
             <div class="mt-16">
                 <h2 class="text-2xl font-bold mb-6">Sản phẩm tương tự</h2>
                 <div class="related-products">
-                    <!-- Products will be loaded from database via JavaScript -->
-                </div>
+    @foreach($relatedProducts as $related)
+    <div class="product-card">
+        <div class="bg-gray-100 rounded-lg overflow-hidden mb-3">
+            @php
+                $relatedMainImage = trim(explode(' ', $related->image)[0]);
+            @endphp
+            <img src="{{ asset('images/' . $relatedMainImage) }}" alt="{{ $related->name }}" class="w-full h-auto" loading="lazy">
+        </div>
+        <h4 class="font-medium">{{ $related->name }}</h4>
+        <p class="text-sm text-gray-600">{{ $related->category }}</p>
+        <p class="font-bold">{{ number_format($related->price) }}₫</p>
+    </div>
+    @endforeach
+</div>
             </div>
         </div>
     </main>
@@ -378,22 +396,31 @@
             ];
 
             // Display sample reviews
-            const reviewsContainer = document.querySelector('#customer-reviews .space-y-6');
-            sampleReviews.forEach(review => {
-                const reviewElement = document.createElement('div');
-                reviewElement.className = 'review';
-                reviewElement.innerHTML = `
-                    <div class="flex items-center mb-2">
-                        <div class="font-semibold mr-2">${review.name}</div>
-                        <div class="text-yellow-400">
-                            ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
-                        </div>
-                        <div class="text-gray-500 text-sm ml-2">${review.date}</div>
-                    </div>
-                    <p class="text-gray-700">${review.comment}</p>
-                `;
-                reviewsContainer.appendChild(reviewElement);
-            });
+            // Thay phần sample reviews bằng dynamic data nếu bạn có
+const reviewsContainer = document.querySelector('#customer-reviews .space-y-6');
+@if($product->reviews && count($product->reviews) > 0)
+    @foreach($product->reviews as $review)
+        const reviewElement = document.createElement('div');
+        reviewElement.className = 'review';
+        reviewElement.innerHTML = `
+            <div class="flex items-center mb-2">
+                <div class="font-semibold mr-2">{{ $review->user->name }}</div>
+                <div class="text-yellow-400">
+                    ${'★'.repeat({{ $review->rating }})}${'☆'.repeat(5 - {{ $review->rating }})}
+                </div>
+                <div class="text-gray-500 text-sm ml-2">{{ $review->created_at->format('d/m/Y') }}</div>
+            </div>
+            <p class="text-gray-700">{{ $review->comment }}</p>
+        `;
+        reviewsContainer.appendChild(reviewElement);
+    @endforeach
+@else
+    // Hiển thị message nếu không có review
+    const noReviewElement = document.createElement('div');
+    noReviewElement.className = 'text-gray-500 italic';
+    noReviewElement.textContent = 'Chưa có đánh giá nào cho sản phẩm này';
+    reviewsContainer.appendChild(noReviewElement);
+@endif
 
             // Sample similar products data (would normally come from database)
             const similarProducts = [
