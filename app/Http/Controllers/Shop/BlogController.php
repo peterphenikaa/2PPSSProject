@@ -17,4 +17,10 @@ class BlogController extends Controller
         $blogs = $query->orderByDesc('created_at')->paginate(9);
         return view('shop.blog', compact('blogs'));
     }
+
+    public function show($slug)
+    {
+        $blog = Blog::where('slug', $slug)->where('status', 'published')->firstOrFail();
+        return view('shop.blog-detail', compact('blog'));
+    }
 }

@@ -5,7 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Trang chính</title>
+    <title>@yield('meta_title', '2PSS Sneaker - Bùng nổ phong cách – Định hình cá tính')</title>
+    <meta name="description" content="@yield('meta_description', 'Cửa hàng giày sneaker chính hãng, đa dạng thương hiệu, giá tốt, giao hàng toàn quốc.')">
+    <meta property="og:title" content="@yield('meta_title', '2PSS Sneaker - Bùng nổ phong cách – Định hình cá tính')">
+    <meta property="og:description" content="@yield('meta_description', 'Cửa hàng giày sneaker chính hãng, đa dạng thương hiệu, giá tốt, giao hàng toàn quốc.')">
+    <meta property="og:image" content="@yield('meta_image', asset('images/anh_main.jpg'))">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
     @vite('resources/css/app.css')
     @vite('resources/css/header.css')
     @vite('resources/css/footer.css')
@@ -96,7 +101,7 @@
                             <a href="/blogs?search={{ urlencode($blog->title) }}">
                                 <div class="w-full h-48 flex items-center justify-center overflow-hidden mb-3 bg-gray-50 rounded-t-lg">
                                     @if($blog->image && file_exists(public_path('storage/'.$blog->image)))
-                                        <img src="{{ asset('storage/'.$blog->image) }}" alt="{{ $blog->title }}" class="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md">
+                                        <img src="{{ asset('images/'.$blog->image) }}" alt="{{ $blog->title }}" class="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md">
                                     @else
                                         <div class="w-full h-full bg-gray-100 flex items-center justify-center">
                                             <span class="material-icons-round text-gray-400 text-5xl">image_not_supported</span>
@@ -122,7 +127,7 @@
                                 <div class="rounded-xl p-4 shadow hover:shadow-lg transition bg-white group border border-gray-100 hover:border-indigo-400">
                                     <a href="{{ route('products.show', $product->id) }}">
                                         <div class="w-full h-48 flex items-center justify-center overflow-hidden mb-3 bg-gray-50 rounded-lg">
-                                            <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
+                                            <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->name }}"
                                                 class="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md">
                                         </div>
                                         <h4 class="mt-2 font-semibold text-gray-800 text-base md:text-lg line-clamp-1">{{ $product->name }}</h4>

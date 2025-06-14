@@ -104,7 +104,7 @@
                                         {{ $order->status }}
                                     </span>
                                 </td>
-                                <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                                <td>{{ $order->created_at ? $order->created_at->format('d/m/Y H:i') : 'Chưa có' }}</td>
                                 <td class="text-right">
                                     <a href="/admin/orders/{{ $order->id }}" class="action-link text-indigo-600">
                                         Chi tiết

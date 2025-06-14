@@ -129,7 +129,7 @@
                                     <span
                                         class="badge {{ $blog->status == 'published' ? 'bg-success' : 'bg-secondary' }}">{{ $blog->status }}</span>
                                 </td>
-                                <td>{{ $blog->created_at->format('d/m/Y H:i') }}</td>
+                                <td>{{ $blog->created_at ? $blog->created_at->format('d/m/Y H:i') : 'Chưa có' }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('admin.blog.edit', $blog->id) }}"
                                         class="text-indigo-600 hover:text-indigo-800 transition-colors">

@@ -55,28 +55,23 @@
                             <div>
                                 <h3 class="font-bold text-gray-900 mb-2 pb-1 border-b">THƯƠNG HIỆU</h3>
                                 <div class="grid grid-cols-2 gap-2">
-                                    <a href="/brands/nike"
+                                    <a href="{{ route('products.brand', 'nike') }}"
                                         class="px-3 py-2 hover:bg-gray-50 rounded text-gray-800 hover:text-red-600">Nike</a>
-                                    <a href="/brands/adidas"
+                                    <a href="{{ route('products.brand', 'adidas') }}"
                                         class="px-3 py-2 hover:bg-gray-50 rounded text-gray-800 hover:text-red-600">Adidas</a>
-                                    <a href="/brands/jordan"
+                                    <a href="{{ route('products.brand', 'jordan') }}"
                                         class="px-3 py-2 hover:bg-gray-50 rounded text-gray-800 hover:text-red-600">Jordan</a>
-                                    <a href="/brands/puma"
+                                    <a href="{{ route('products.brand', 'puma') }}"
                                         class="px-3 py-2 hover:bg-gray-50 rounded text-gray-800 hover:text-red-600">Puma</a>
-                                    <a href="/brands/converse"
+                                    <a href="{{ route('products.brand', 'converse') }}"
                                         class="px-3 py-2 hover:bg-gray-50 rounded text-gray-800 hover:text-red-600">Converse</a>
-                                    <a href="/brands/vans"
+                                    <a href="{{ route('products.brand', 'vans') }}"
                                         class="px-3 py-2 hover:bg-gray-50 rounded text-gray-800 hover:text-red-600">Vans</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Sale Link -->
-                <a href="/sale"
-                    class="nav-link text-gray-900 font-semibold text-lg hover:text-red-600 transition-colors duration-200">KHUYẾN
-                    MÃI</a>
 
                 <!-- Blog Link -->
                 <a href="{{ route('shop.blog.index') }}"
@@ -193,21 +188,18 @@
                     <div class="border-t border-gray-200 mt-2 pt-2">
                         <h4 class="font-medium text-gray-900 mb-1">Thương hiệu</h4>
                         <div class="grid grid-cols-2 gap-2">
-                            <a href="/brands/nike" class="text-sm text-gray-700 hover:text-red-600">Nike</a>
-                            <a href="/brands/adidas" class="text-sm text-gray-700 hover:text-red-600">Adidas</a>
-                            <a href="/brands/newbalance" class="text-sm text-gray-700 hover:text-red-600">New
+                            <a href="{{ route('products.brand', 'nike') }}" class="text-sm text-gray-700 hover:text-red-600">Nike</a>
+                            <a href="{{ route('products.brand', 'adidas') }}" class="text-sm text-gray-700 hover:text-red-600">Adidas</a>
+                            <a href="{{ route('products.brand', 'newbalance') }}" class="text-sm text-gray-700 hover:text-red-600">New
                                 balance</a>
-                            <a href="/brands/puma" class="text-sm text-gray-700 hover:text-red-600">Puma</a>
-                            <a href="/brands/converse" class="text-sm text-gray-700 hover:text-red-600">Converse</a>
-                            <a href="/brands/vans" class="text-sm text-gray-700 hover:text-red-600">Vans</a>
+                            <a href="{{ route('products.brand', 'puma') }}" class="text-sm text-gray-700 hover:text-red-600">Puma</a>
+                            <a href="{{ route('products.brand', 'converse') }}" class="text-sm text-gray-700 hover:text-red-600">Converse</a>
+                            <a href="{{ route('products.brand', 'vans') }}" class="text-sm text-gray-700 hover:text-red-600">Vans</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <a href="/sale"
-                class="block py-2 text-gray-900 font-semibold text-lg hover:text-red-600 transition-colors duration-200">KHUYẾN
-                MÃI</a>
             <a href="/blog"
                 class="block py-2 text-gray-900 font-semibold text-lg hover:text-red-600 transition-colors duration-200">BLOG</a>
             <a href="/contact"
@@ -236,4 +228,6 @@
             </form>
         </div>
     </div>
+
+    <link rel="canonical" href="{{ url()->current() }}" />
 </header>

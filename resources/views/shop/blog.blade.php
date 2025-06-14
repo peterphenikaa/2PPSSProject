@@ -66,7 +66,7 @@
                                     </p>
                                 </div>
                                 <div class="mt-auto pt-4 border-t border-gray-100">
-                                    <a href="#"
+                                    <a href="{{ route('shop.blog.show', $blog->slug) }}"
                                         class="text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center transition-colors">
                                         Đọc bài viết
                                     </a>
@@ -110,4 +110,8 @@
 @push('styles')
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 @endpush
+
+@section('meta_title', 'Blog - 2PSS Sneaker')
+@section('meta_description', 'Tổng hợp các bài viết, tin tức, xu hướng sneaker mới nhất từ 2PSS Sneaker.')
+@section('meta_image', asset('images/anh_main.jpg'))
 

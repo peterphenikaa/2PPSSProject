@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
@@ -16,7 +14,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('price');
-            $table->json('images')->nullable(); 
+            $table->string('image')->nullable();
             $table->json('available_sizes')->nullable();
             $table->string('gender')->nullable();
             $table->string('brand')->nullable();   

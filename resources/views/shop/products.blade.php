@@ -202,7 +202,7 @@
     <div class="product-card group border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-300 bg-white hover:border-gray-200">
         <div class="w-full product-image-container bg-gray-50 overflow-hidden">
             <img 
-                src="{{ asset('storage/' . $product->image) }}"
+                src="{{ asset('images/' . $product->image) }}"
                 alt="{{ $product->name }}"
                 class="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
                 loading="lazy"

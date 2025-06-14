@@ -97,21 +97,28 @@ class ProductController
         return view('shop.products', compact('products', 'filter', 'names', 'genders', 'colorways', 'sizes'));
     }
     public function show($id)
-    {
-    $product = Product::findOrFail($id);
-    
-    // Xử lý ảnh sản phẩm
-    $mainImage = trim(explode(' ', $product->image)[0]); // Lấy ảnh đầu tiên
-    $additionalImages = explode(' ', trim($product->image));
-    array_shift($additionalImages); // Bỏ ảnh đầu tiên (đã lấy làm main)
-    
-    $relatedProducts = Product::where('category', $product->category)
-                            ->where('id', '!=', $product->id)
-                            ->limit(4)
-                            ->get();
-    
-    return view('shop.product-items', compact('product', 'mainImage', 'additionalImages', 'relatedProducts'));
-    }
+{
+    $product = Product::with('images')->findOrFail($id);
+
+    $mainImage = $product->image ?? 'default.jpg';
+    $additionalImages = $product->images->sortBy('order')->take(4);
+
+    // Lấy ngẫu nhiên 4 sản phẩm khác (không phân biệt category)
+    $relatedProducts = Product::where('id', '!=', $product->id)
+        ->inRandomOrder()
+        ->limit(4)
+        ->get();
+
+    return view('shop.product-items', compact(
+        'product', 
+        'mainImage', 
+        'additionalImages', 
+        'relatedProducts'
+    ));
+}
+
+
+
 public function homepageProducts()
     {
         $newProducts = Product::latest()->take(8)->get(); // Lấy 8 sản phẩm mới nhất
@@ -132,5 +139,17 @@ public function homepageProducts()
         return view('admin.product', [
             'products' => $products,
         ]);
+    }
+    public function brandFilter($brand)
+    {
+        $products = Product::where('brand', $brand)->get();
+        $filter = $brand;
+        // Lấy dữ liệu lọc sidebar từ tất cả sản phẩm
+        $all = Product::all();
+        $names = $all->pluck('name')->unique()->sort()->values();
+        $genders = $all->pluck('gender')->unique()->sort()->values();
+        $colorways = $all->pluck('colorway')->unique()->sort()->values();
+        $sizes = $all->pluck('available_sizes')->filter()->flatten()->unique()->sort()->values();
+        return view('shop.products', compact('products', 'filter', 'names', 'genders', 'colorways', 'sizes'));
     }
 }

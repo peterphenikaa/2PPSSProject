@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Auth;
+
 class OrderController
 {
     public function order()
@@ -44,5 +46,42 @@ class OrderController
             'recentOrders' => $orders,
             // ...truyền thêm các biến khác nếu cần...
         ]);
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'selected_size' => 'required|string',
+            'recipient_name' => 'required|string|max:255',
+            'recipient_phone' => 'required|string|max:20',
+            'province' => 'required|string|max:255',
+            'district' => 'required|string|max:255',
+            'ward' => 'required|string|max:255',
+            'address_detail' => 'required|string|max:255',
+            'payment_method' => 'required|in:cod,bank_transfer',
+        ]);
+
+        $order = Order::create([
+            'user_id' => Auth::id() ?? null,
+            'recipient_name' => $request->recipient_name,
+            'recipient_phone' => $request->recipient_phone,
+            'province' => $request->province,
+            'district' => $request->district,
+            'ward' => $request->ward,
+            'address_detail' => $request->address_detail,
+            'payment_method' => $request->payment_method,
+            'total_price' => $request->price,
+            'status' => 'Chờ xác nhận',
+        ]);
+
+        OrderItem::create([
+            'order_id' => $order->id,
+            'product_id' => $request->product_id,
+            'quantity' => 1,
+            'price' => $request->price,
+            'size' => $request->selected_size,
+        ]);
+
+        return redirect()->back()->with('success', 'Đặt hàng thành công!');
     }
 }
