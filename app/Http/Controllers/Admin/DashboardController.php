@@ -19,8 +19,28 @@ class DashboardController
 
         $recentOrders = Order::with('user')->latest()->take(5)->get();
 
-        $revenueLabels = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6'];
-        $revenueData = [15000000, 12000000, 18000000, 22000000, 9000000, 19500000];
+        // Doanh thu 6 tháng gần nhất
+        $revenueLabels = [];
+        $revenueData = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $month = now()->subMonths($i);
+            $revenueLabels[] = 'T' . $month->format('n');
+            $revenueData[] = Order::whereYear('created_at', $month->year)
+                ->whereMonth('created_at', $month->month)
+                ->sum('total_price');
+        }
+
+        // Phân loại đơn hàng
+        $statusLabels = [
+            'Đã giao',
+            'Đang giao hàng',
+            'Đã hủy',
+            'Chờ xác nhận',
+        ];
+        $statusData = [];
+        foreach ($statusLabels as $status) {
+            $statusData[] = Order::where('status', $status)->count();
+        }
 
         return view('admin.dashboard', compact(
             'orderCount',
@@ -29,7 +49,9 @@ class DashboardController
             'customerCount',
             'recentOrders',
             'revenueLabels',
-            'revenueData'
+            'revenueData',
+            'statusLabels',
+            'statusData',
         ));
     }
 }

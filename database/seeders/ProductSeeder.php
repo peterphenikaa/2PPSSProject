@@ -3,133 +3,57 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 use App\Models\Product;
+use App\Models\ProductImage;
+use Illuminate\Support\Facades\DB;
 
 class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        Product::insert([
-            [
-                'name' => 'Nike Air Max 97',
-                'description' => 'Phong cách thể thao, thoải mái',
-                'price' => 3200000,
-                'image' => 'nike_airmax97.jpg',
-                'available_sizes' => json_encode(['38', '39', '40', '41']),
-                'gender' => 'unisex',
-                'colorway' => 'Trắng/Đỏ',
-                'stock' => 20,
-                'brand' => 'Nike',
-                'category' => 'Chạy bộ',
-            ],
-            [
-                'name' => 'Adidas Ultraboost 22',
-                'description' => 'Siêu nhẹ, siêu êm',
-                'price' => 2900000,
-                'image' => 'adidas_ultraboost.jpg',
-                'available_sizes' => json_encode(['40', '41', '42']),
-                'gender' => 'male',
-                'colorway' => 'Đen/Xanh',
-                'stock' => 15,
-                'brand' => 'Adidas',
-                'category' => 'Thể thao',
-            ],
-            [
-                'name' => 'Converse Chuck 70',
-                'description' => 'Biểu tượng bất tử, dễ phối đồ',
-                'price' => 1800000,
-                'image' => 'converse_chuck70.jpg',
-                'available_sizes' => json_encode(['37', '38', '39', '40', '41']),
-                'gender' => 'unisex',
-                'colorway' => 'Trắng/Đen',
-                'stock' => 25,
-                'brand' => 'Converse',
-                'category' => 'Cổ điển',
-            ],
-            [
-                'name' => 'Puma RS-X',
-                'description' => 'Retro, cá tính mạnh mẽ',
-                'price' => 2100000,
-                'image' => 'puma_rsx.jpg',
-                'available_sizes' => json_encode(['39', '40', '41', '42']),
-                'gender' => 'male',
-                'colorway' => 'Xám/Xanh',
-                'stock' => 18,
-                'brand' => 'Puma',
-                'category' => 'Retro',
-            ],
-            [
-                'name' => 'Vans Old Skool',
-                'description' => 'Đơn giản, chất, không lỗi mốt',
-                'price' => 1600000,
-                'image' => 'vans_oldskool.jpg',
-                'available_sizes' => json_encode(['36', '37', '38', '39']),
-                'gender' => 'female',
-                'colorway' => 'Đen/Trắng',
-                'stock' => 22,
-                'brand' => 'Vans',
-                'category' => 'Cổ điển',
-            ],
-            [
-                'name' => 'Jordan 1 Low',
-                'description' => 'Phong cách bóng rổ, trẻ trung',
-                'price' => 3500000,
-                'image' => 'jordan1_low.jpg',
-                'available_sizes' => json_encode(['40', '41', '42', '43']),
-                'gender' => 'male',
-                'colorway' => 'Đỏ/Trắng/Đen',
-                'stock' => 10,
-                'brand' => 'Jordan',
-                'category' => 'Bóng rổ',
-            ],
-            [
-                'name' => 'Nike Air Force 1',
-                'description' => 'Huyền thoại streetwear',
-                'price' => 2500000,
-                'image' => 'nike_airforce1.jpg',
-                'available_sizes' => json_encode(['38', '39', '40', '41', '42']),
-                'gender' => 'unisex',
-                'colorway' => 'Trắng',
-                'stock' => 30,
-                'brand' => 'Nike',
-                'category' => 'Streetwear',
-            ],
-            [
-                'name' => 'Adidas Stan Smith',
-                'description' => 'Đơn giản, thanh lịch',
-                'price' => 1900000,
-                'image' => 'adidas_stansmith.jpg',
-                'available_sizes' => json_encode(['36', '37', '38', '39', '40']),
-                'gender' => 'female',
-                'colorway' => 'Trắng/Xanh',
-                'stock' => 16,
-                'brand' => 'Adidas',
-                'category' => 'Cổ điển',
-            ],
-            [
-                'name' => 'Puma Suede Classic',
-                'description' => 'Chất liệu suede sang trọng',
-                'price' => 1700000,
-                'image' => 'puma_suede.jpg',
-                'available_sizes' => json_encode(['37', '38', '39', '40']),
-                'gender' => 'unisex',
-                'colorway' => 'Đỏ/Trắng',
-                'stock' => 12,
-                'brand' => 'Puma',
-                'category' => 'Classic',
-            ],
-            [
-                'name' => 'Vans Slip-On',
-                'description' => 'Tiện lợi, năng động',
-                'price' => 1500000,
-                'image' => 'vans_slipon.jpg',
-                'available_sizes' => json_encode(['36', '37', '38', '39', '40']),
-                'gender' => 'unisex',
-                'colorway' => 'Trắng/Đen',
-                'stock' => 20,
-                'brand' => 'Vans',
-                'category' => 'Slip-on',
-            ],
-        ]);
+        // Tắt kiểm tra khóa ngoại
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('product_images')->truncate();
+        DB::table('products')->truncate();
+        // Bật lại kiểm tra khóa ngoại
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        $imageFiles = File::files(public_path('images'));
+        $imageGroups = [];
+        foreach ($imageFiles as $file) {
+            $name = pathinfo($file->getFilename(), PATHINFO_FILENAME);
+            if (preg_match('/^(.+)-(\d)$/', $name, $matches)) {
+                $baseName = $matches[1];
+                $imageGroups[$baseName][] = $file->getFilename();
+            }
+        }
+        foreach ($imageGroups as $baseName => $images) {
+            sort($images, SORT_NATURAL); // Đảm bảo thứ tự 1-5
+            // Chỉ tạo sản phẩm khi đủ 5 ảnh
+            if (count($images) === 5) {
+                $product = Product::create([
+                    'name' => ucwords(str_replace('-', ' ', $baseName)),
+                    'category' => 'Sneakers',
+                    'description' => 'Mô tả sản phẩm ' . $baseName,
+                    'main_image' => $images[0], // 1 là ảnh chính
+                    'available_sizes' => ['38', '39', '40', '41', '42', '43'],
+                    'price' => rand(1000000, 5000000),
+                    'stock' => rand(10, 100),
+                    'colorway' => 'Black/White',
+                    'gender' => 'Unisex',
+                    'is_featured' => false,
+                    'ratings' => rand(1, 5),
+                ]);
+                // 2-5 là ảnh phụ
+                foreach (array_slice($images, 1, 4) as $index => $image) {
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image_path' => $image,
+                        'order' => $index + 1,
+                    ]);
+                }
+            }
+        }
     }
 } 

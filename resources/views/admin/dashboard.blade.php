@@ -215,14 +215,14 @@
         new Chart(orderStatusCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Đã giao', 'Đang giao', 'Đã hủy', 'Chờ xác nhận'],
+                labels: {!! json_encode($statusLabels) !!},
                 datasets: [{
-                    data: [65, 15, 10, 10],
+                    data: {!! json_encode($statusData) !!},
                     backgroundColor: [
-                        '#10b981',
-                        '#f59e0b',
-                        '#ef4444',
-                        '#94a3b8'
+                        '#10b981', // Đã giao
+                        '#f59e0b', // Đang giao hàng
+                        '#ef4444', // Đã hủy
+                        '#94a3b8', // Chờ xác nhận
                     ],
                     borderWidth: 0,
                 }]

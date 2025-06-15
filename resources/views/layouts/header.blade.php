@@ -85,24 +85,20 @@
 
             <!-- Right Icons -->
             <div class="flex items-center space-x-5 md:space-x-6">
-                <!-- Search Icon with Dropdown -->
-                <div class="relative group">
-                    <button
-                        class="p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200 focus:outline-none">
+                <!-- Search Icon sát giỏ hàng, input hiện ra bên trái icon khi bấm -->
+                <div class="relative flex items-center">
+                    <form id="inline-search-form" action="/search" method="GET" class="absolute right-8 top-1/2 -translate-y-1/2 flex items-center bg-white border border-gray-300 rounded-full px-3 py-1 shadow transition-all duration-300 w-0 opacity-0 overflow-hidden z-50">
+                        <input type="text" name="q" placeholder="Tìm giày, thương hiệu..." class="bg-transparent border-0 outline-none text-sm w-40" />
+                        <button type="submit" class="ml-1">
+                            <img src="{{ asset('images/icon_search.png') }}" alt="Search" class="h-4 w-4">
+                        </button>
+                        <button type="button" id="close-inline-search" class="ml-1 text-gray-400 hover:text-gray-700">
+                            <span class="material-icons-round text-lg">close</span>
+                        </button>
+                    </form>
+                    <button id="search-toggle-btn" class="p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200 focus:outline-none z-10">
                         <img src="{{ asset('images/icon_search.png') }}" alt="Search" class="h-5 w-5 md:h-6 md:w-6">
                     </button>
-                    <div
-                        class="absolute right-0 top-full mt-2 w-64 bg-white rounded-md shadow-lg z-50 border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
-                        <form action="/search" method="GET" class="p-3">
-                            <div class="relative">
-                                <input type="text" name="q" placeholder="Tìm giày, thương hiệu..."
-                                    class="w-full border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm">
-                                <button type="submit" class="absolute right-3 top-2.5">
-                                    <img src="{{ asset('images/icon_search.png') }}" alt="Search" class="h-4 w-4">
-                                </button>
-                            </div>
-                        </form>
-                    </div>
                 </div>
 
                 <!-- Cart -->
@@ -228,6 +224,53 @@
             </form>
         </div>
     </div>
+
+    <!-- Overlay Search Bar -->
+    <div id="search-overlay" class="fixed inset-0 bg-black bg-opacity-30 z-[9999] flex items-start justify-center pt-8 hidden">
+        <form action="/search" method="GET" class="bg-white rounded-full shadow-lg flex items-center px-4 py-2 w-full max-w-xl relative">
+            <input type="text" name="q" placeholder="Tìm giày, thương hiệu..." class="flex-1 border-0 outline-none bg-transparent text-lg px-2">
+            <button type="submit" class="ml-2">
+                <img src="{{ asset('images/icon_search.png') }}" alt="Search" class="h-5 w-5">
+            </button>
+            <button type="button" id="close-search-overlay" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700">
+                <span class="material-icons-round text-2xl">close</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const searchBtn = document.getElementById('search-toggle-btn');
+        const searchForm = document.getElementById('inline-search-form');
+        const closeBtn = document.getElementById('close-inline-search');
+        let searchOpen = false;
+        searchBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            searchForm.classList.remove('w-0', 'opacity-0', 'overflow-hidden');
+            searchForm.classList.add('w-64', 'opacity-100');
+            searchForm.querySelector('input').focus();
+            searchOpen = true;
+        });
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            searchForm.classList.add('w-0', 'opacity-0', 'overflow-hidden');
+            searchForm.classList.remove('w-64', 'opacity-100');
+            searchOpen = false;
+        });
+        document.addEventListener('mousedown', (e) => {
+            if (searchOpen && !searchForm.contains(e.target) && e.target !== searchBtn) {
+                searchForm.classList.add('w-0', 'opacity-0', 'overflow-hidden');
+                searchForm.classList.remove('w-64', 'opacity-100');
+                searchOpen = false;
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && searchOpen) {
+                searchForm.classList.add('w-0', 'opacity-0', 'overflow-hidden');
+                searchForm.classList.remove('w-64', 'opacity-100');
+                searchOpen = false;
+            }
+        });
+    </script>
 
     <link rel="canonical" href="{{ url()->current() }}" />
 </header>
