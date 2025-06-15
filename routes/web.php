@@ -65,6 +65,9 @@ Route::post(
 )->name('password.update');
 
 // Route sản phẩm cho khách
+Route::get('/products', function() {
+    return redirect('/products/new-arrivals');
+});
 Route::get('/products/{filter}', [ProductController::class, 'filter'])->name('products.filter');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/brands/{brand}', [ProductController::class, 'brandFilter'])->name('products.brand');

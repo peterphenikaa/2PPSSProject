@@ -42,6 +42,15 @@
         </div>
         <form action="{{ route('cart.checkout.submit') }}" method="POST" class="space-y-5" id="checkout-form">
             @csrf
+            @if ($errors->any())
+                <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                    <ul class="list-disc pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <input type="hidden" name="province_name" id="province_name">
             <input type="hidden" name="district_name" id="district_name">
             <input type="hidden" name="ward_name" id="ward_name">
@@ -90,18 +99,30 @@
     </div>
 </div>
 <script>
-// Copy lại logic load địa chỉ từ popup
 function loadProvinces() {
     fetch('https://provinces.open-api.vn/api/')
         .then(response => response.json())
         .then(provinces => {
             const provinceSelect = document.getElementById('province');
+            provinceSelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
             provinces.forEach(province => {
                 const option = document.createElement('option');
                 option.value = province.code;
                 option.textContent = province.name;
                 provinceSelect.appendChild(option);
             });
+            // Nếu có old value thì set lại
+            @if (old('province'))
+                for (let i = 0; i < provinceSelect.options.length; i++) {
+                    if (provinceSelect.options[i].value == "{{ old('province') }}") {
+                        provinceSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+                if (provinceSelect.value) {
+                    loadDistricts(provinceSelect.value);
+                }
+            @endif
         });
 }
 function loadDistricts(provinceId) {
@@ -116,9 +137,21 @@ function loadDistricts(provinceId) {
                 option.textContent = district.name;
                 districtSelect.appendChild(option);
             });
+            districtSelect.disabled = false;
             document.getElementById('ward').disabled = true;
             document.getElementById('ward').innerHTML = '<option value="">Chọn phường/xã</option>';
-            districtSelect.disabled = false;
+            // Nếu có old value thì set lại
+            @if (old('district'))
+                for (let i = 0; i < districtSelect.options.length; i++) {
+                    if (districtSelect.options[i].value == "{{ old('district') }}") {
+                        districtSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+                if (districtSelect.value) {
+                    loadWards(districtSelect.value);
+                }
+            @endif
         });
 }
 function loadWards(districtId) {
@@ -134,14 +167,21 @@ function loadWards(districtId) {
                 wardSelect.appendChild(option);
             });
             wardSelect.disabled = false;
+            // Nếu có old value thì set lại
+            @if (old('ward'))
+                for (let i = 0; i < wardSelect.options.length; i++) {
+                    if (wardSelect.options[i].value == "{{ old('ward') }}") {
+                        wardSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            @endif
         });
 }
 document.addEventListener('DOMContentLoaded', function () {
     loadProvinces();
     document.getElementById('province').addEventListener('change', function() {
         const provinceId = this.value;
-        const selectedText = this.options[this.selectedIndex].text;
-        document.getElementById('province_name').value = selectedText;
         if (provinceId) {
             loadDistricts(provinceId);
         } else {
@@ -151,32 +191,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const wardSelect = document.getElementById('ward');
             wardSelect.disabled = true;
             wardSelect.innerHTML = '<option value="">Chọn phường/xã</option>';
-            document.getElementById('district_name').value = '';
-            document.getElementById('ward_name').value = '';
         }
     });
     document.getElementById('district').addEventListener('change', function() {
         const districtId = this.value;
-        const selectedText = this.options[this.selectedIndex].text;
-        document.getElementById('district_name').value = selectedText;
         if (districtId) {
             loadWards(districtId);
         } else {
             const wardSelect = document.getElementById('ward');
             wardSelect.disabled = true;
             wardSelect.innerHTML = '<option value="">Chọn phường/xã</option>';
-            document.getElementById('ward_name').value = '';
         }
-    });
-    document.getElementById('ward').addEventListener('change', function() {
-        const selectedText = this.options[this.selectedIndex].text;
-        document.getElementById('ward_name').value = selectedText;
-    });
-    // Khi submit form, thay thế value các select bằng tên
-    document.getElementById('checkout-form').addEventListener('submit', function() {
-        document.getElementById('province').value = document.getElementById('province_name').value;
-        document.getElementById('district').value = document.getElementById('district_name').value;
-        document.getElementById('ward').value = document.getElementById('ward_name').value;
     });
 });
 </script>

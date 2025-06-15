@@ -45,8 +45,8 @@
                             class="flex flex-col overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white">
                             <!-- Featured Image -->
                             <div class="h-56 w-full overflow-hidden">
-                                @if ($blog->image && file_exists(public_path('storage/' . $blog->image)))
-                                    <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}"
+                                @if ($blog->image)
+                                    <img src="{{ asset('images/' . $blog->image) }}" alt="{{ $blog->title }}"
                                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                                 @else
                                     <div class="w-full h-full bg-gray-100 flex items-center justify-center">

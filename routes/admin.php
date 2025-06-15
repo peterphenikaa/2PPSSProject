@@ -14,6 +14,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/orders', [OrderController::class, 'order'])->name('admin.order');
     Route::get('/admin/orders/search', [OrderController::class, 'search'])->name('admin.orders.search');
+    Route::get('/admin/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
     Route::get('/admin/products', [ProductController::class, 'product'])->name('admin.product');
     Route::get('/admin/products/search', [ProductController::class, 'search'])->name('admin.products.search');
     Route::get('/admin/users', [UserController::class, 'user'])->name('admin.user');
@@ -42,4 +43,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/update/{id}', [BlogController::class, 'update'])->name('admin.blog.update');
         Route::delete('/delete/{id}', [BlogController::class, 'destroy'])->name('admin.blog.destroy');
     });
+
+    Route::post('/admin/orders/{id}/update-status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
 });

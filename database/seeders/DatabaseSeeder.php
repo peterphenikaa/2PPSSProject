@@ -130,5 +130,9 @@ class DatabaseSeeder extends Seeder
         $this->call(StoreSeeder::class);
         // Seed blogs
         $this->call(BlogSeeder::class);
+
+        // Tự động cập nhật ngày tạo và cập nhật gần nhất cho user bị thiếu
+        DB::table('users')->whereNull('created_at')->update(['created_at' => Carbon::now()]);
+        DB::table('users')->whereNull('updated_at')->update(['updated_at' => Carbon::now()]);
     }
 }

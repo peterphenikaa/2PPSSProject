@@ -99,7 +99,6 @@ class CartController extends Controller
         if (empty($cart)) {
             return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống!');
         }
-        // Lưu vào bảng orders
         $order = Order::create([
             'user_id' => Auth::id(),
             'recipient_name' => $validated['recipient_name'],
@@ -110,9 +109,8 @@ class CartController extends Controller
             'address_detail' => $validated['address_detail'],
             'payment_method' => $validated['payment_method'],
             'total_price' => array_sum(array_map(function($item) { return $item['price'] * $item['quantity']; }, $cart)),
-            'status' => $validated['payment_method'] === 'momo_qr' ? 'Chờ thanh toán Momo' : 'Chờ xác nhận',
+            'status' => strpos($validated['payment_method'], 'momo') !== false ? 'Chờ thanh toán Momo' : 'Chờ xác nhận',
         ]);
-        // Lưu từng sản phẩm vào order_items
         foreach ($cart as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
@@ -122,8 +120,7 @@ class CartController extends Controller
                 'size' => $item['size'],
             ]);
         }
-        if ($validated['payment_method'] === 'momo_qr') {
-            // Không xóa giỏ hàng, chuyển hướng sang trang QR
+        if (strpos($validated['payment_method'], 'momo') !== false) {
             return redirect()->route('cart.momo_qr', ['order' => $order->id]);
         }
         session()->forget('cart');

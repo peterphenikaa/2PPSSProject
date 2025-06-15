@@ -100,7 +100,7 @@
                         <div class="rounded-xl shadow hover:shadow-lg transition bg-white border border-gray-100 hover:border-indigo-400 flex flex-col overflow-hidden">
                             <a href="/blogs?search={{ urlencode($blog->title) }}">
                                 <div class="w-full h-48 flex items-center justify-center overflow-hidden mb-3 bg-gray-50 rounded-t-lg">
-                                    @if($blog->image && file_exists(public_path('storage/'.$blog->image)))
+                                    @if($blog->image)
                                         <img src="{{ asset('images/'.$blog->image) }}" alt="{{ $blog->title }}" class="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md">
                                     @else
                                         <div class="w-full h-full bg-gray-100 flex items-center justify-center">

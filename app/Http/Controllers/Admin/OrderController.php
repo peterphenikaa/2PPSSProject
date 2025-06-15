@@ -84,4 +84,19 @@ class OrderController
 
         return redirect()->back()->with('success', 'Đặt hàng thành công!');
     }
+    public function show($id)
+    {
+        $order = Order::with(['user', 'orderItems.product'])->findOrFail($id);
+        return view('admin.order-detail', compact('order'));
+    }
+    public function updateStatus(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $request->validate([
+            'status' => 'required|string|max:255',
+        ]);
+        $order->status = $request->status;
+        $order->save();
+        return redirect()->route('admin.orders.show', $order->id)->with('success', 'Cập nhật trạng thái thành công!');
+    }
 }

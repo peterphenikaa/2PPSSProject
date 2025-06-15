@@ -10,13 +10,12 @@ class UserController
     public function user()
     {
         $users = User::where('role','user')->get()->map(function ($user) {
-            
             return [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'created_at' => optional($user->created_at)->format('Y-m-d H:i:s'),
-                'updated_at' => optional($user->updated_at)->format('Y-m-d H:i:s'),
+                'created_at' => $user->created_at ? $user->created_at->format('d/m/Y H:i') : '',
+                'updated_at' => $user->updated_at ? $user->updated_at->format('d/m/Y H:i') : '',
             ];
         })->toArray();
         return view('admin.user',compact('users'));

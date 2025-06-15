@@ -101,7 +101,6 @@
                             <th>Tiêu đề</th>
                             <th>Ảnh</th>
                             <th>Trạng thái</th>
-                            <th>Ngày tạo</th>
                             <th class="w-20">Sửa</th>
                             <th class="w-20">Xóa</th>
                         </tr>
@@ -113,23 +112,18 @@
                                 </td>
                                 <td>{{ $blog->title }}</td>
                                 <td>
-                                    @if ($blog->image && file_exists(public_path('storage/' . $blog->image)))
-                                        <div
-                                            style="width:60px;height:60px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#f3f4f6;border-radius:8px;">
-                                            <img src="{{ asset('storage/' . $blog->image) }}"
-                                                style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"
-                                                class="shadow border" />
-                                        </div>
+                                    @if ($blog->image)
+                                        <button type="button" class="show-image-btn" data-imgsrc="{{ asset((str_starts_with($blog->image, 'blog_images/') || str_starts_with($blog->image, 'public/')) ? 'storage/' . $blog->image : 'images/' . $blog->image) }}" title="Xem ảnh lớn" style="background:none;border:none;outline:none;cursor:pointer;">
+                                            <span class="material-icons-round text-indigo-500" style="font-size:32px;">image</span>
+                                        </button>
                                     @else
-                                        <span class="material-icons-round text-gray-400"
-                                            style="font-size:32px;">image_not_supported</span>
+                                        <span class="material-icons-round text-gray-400" style="font-size:32px;">image_not_supported</span>
                                     @endif
                                 </td>
                                 <td>
                                     <span
                                         class="badge {{ $blog->status == 'published' ? 'bg-success' : 'bg-secondary' }}">{{ $blog->status }}</span>
                                 </td>
-                                <td>{{ $blog->created_at ? $blog->created_at->format('d/m/Y H:i') : 'Chưa có' }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('admin.blog.edit', $blog->id) }}"
                                         class="text-indigo-600 hover:text-indigo-800 transition-colors">
@@ -162,6 +156,15 @@
             </div>
         </div>
     </div>
+    <!-- Modal xem ảnh lớn -->
+    <div id="imageModal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;">
+        <div style="position:relative;max-width:90vw;max-height:90vh;display:flex;align-items:center;justify-content:center;">
+            <button id="closeImageModal" style="position:absolute;top:-32px;right:-32px;background:#fff;border-radius:50%;border:none;width:40px;height:40px;box-shadow:0 2px 8px #0002;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;">
+                <span class="material-icons-round text-gray-700" style="font-size:28px;">close</span>
+            </button>
+            <img id="modalImage" src="" alt="Blog Image" style="max-width:80vw;max-height:80vh;border-radius:12px;box-shadow:0 4px 32px #0005;" />
+        </div>
+    </div>
     <script>
         const helpBtnBlog = document.getElementById('helpBtnBlog');
         const helpModalBlog = document.getElementById('helpModalBlog');
@@ -173,6 +176,22 @@
                 if (e.key === 'Escape') helpModalBlog.style.display = 'none';
             });
         }
+        document.querySelectorAll('.show-image-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('modalImage').src = this.getAttribute('data-imgsrc');
+                document.getElementById('imageModal').style.display = 'flex';
+            });
+        });
+        document.getElementById('closeImageModal').onclick = function() {
+            document.getElementById('imageModal').style.display = 'none';
+            document.getElementById('modalImage').src = '';
+        };
+        document.getElementById('imageModal').onclick = function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+                document.getElementById('modalImage').src = '';
+            }
+        };
     </script>
 </body>
 
