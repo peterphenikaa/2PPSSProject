@@ -5,7 +5,7 @@
     <h1 class="text-2xl font-bold mb-6">Giỏ hàng của bạn</h1>
     @if(count($cart) === 0)
         <p class="text-gray-500">Giỏ hàng của bạn đang trống.</p>
-        <a href="/" class="text-blue-600 hover:underline">Tiếp tục mua sắm</a>
+        <a href="/products/sneakers" class="text-blue-600 hover:underline">Tiếp tục mua sắm</a>
     @else
         <form action="{{ route('orders.store') }}" method="POST">
             @csrf
@@ -63,7 +63,7 @@
                 <a href="{{ route('cart.checkout') }}" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">Mua hàng</a>
             </div>
         </form>
-        <a href="/" class="text-blue-600 hover:underline">Tiếp tục mua sắm</a>
+        <a href="/products/sneakers" class="text-blue-600 hover:underline">Tiếp tục mua sắm</a>
     @endif
 </div>
 @endsection 

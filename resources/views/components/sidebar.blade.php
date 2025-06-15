@@ -7,6 +7,9 @@
 
     <!-- Menu điều hướng -->
     <nav class="p-4 space-y-2 flex-1">
+        <a href="/" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-gray-100 font-medium">
+            <span class="material-icons-round mr-3 text-gray-700">home</span> Về trang chính
+        </a>
         <a href="/admin/dashboard" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-gray-100 font-medium">
             <span class="material-icons-round mr-3 text-gray-700">dashboard</span> Tổng quan
         </a>

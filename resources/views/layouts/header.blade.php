@@ -121,6 +121,11 @@
                                 <p class="text-sm text-gray-700">Xin chào,</p>
                                 <p class="font-semibold text-gray-900">{{ Auth::user()->name }}</p>
                             </div>
+                            @if(Auth::user()->is_admin ?? (Auth::user()->role ?? null) === 'admin')
+                            <a href="/admin/dashboard" class="flex items-center px-4 py-2 text-sm text-indigo-700 hover:bg-gray-100 font-semibold">
+                                <span class="material-icons-round mr-2">admin_panel_settings</span> Quản trị admin
+                            </a>
+                            @endif
                             <a href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
