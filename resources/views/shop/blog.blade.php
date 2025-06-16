@@ -16,7 +16,7 @@
 
             <!-- Search Section -->
             <div class="max-w-2xl mx-auto mb-12">
-                <form action="" method="GET" class="relative">
+                <form action="{{ route('shop.blog.index') }}" method="GET" class="relative">
                     <div class="flex shadow-sm rounded-lg">
                         <input type="text" name="search" value="{{ request('search') }}"
                             placeholder="Tìm kiếm bài viết..."
@@ -29,7 +29,7 @@
                     @if (request('search'))
                         <div class="mt-2 text-sm text-gray-600">
                             Kết quả tìm kiếm cho: <span class="font-semibold">"{{ request('search') }}"</span>
-                            <a href="{{ route('blog.index') }}" class="ml-2 text-indigo-600 hover:text-indigo-800">
+                            <a href="{{ route('shop.blog.index') }}" class="ml-2 text-indigo-600 hover:text-indigo-800">
                                 <span class="material-icons-round align-middle text-base">close</span> Xóa bộ lọc
                             </a>
                         </div>
@@ -88,13 +88,18 @@
                     </p>
                     @if (request('search'))
                         <div class="mt-4">
-                            <a href="{{ route('blog.index') }}"
+                            <a href="{{ route('shop.blog.index') }}"
                                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
                                 Xem tất cả bài viết
                             </a>
                         </div>
                     @endif
                 </div>
+                @if(request('search') && $blogs->count() == 0)
+                    <div class="text-gray-500 italic text-center">
+                        Không tìm thấy bài viết phù hợp.
+                    </div>
+                @endif
             @endif
 
             <!-- Pagination -->

@@ -120,3 +120,4 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 Route::get('auth/{provider}', [SocialController::class, 'redirect'])->name('social.redirect');
 Route::get('auth/{provider}/callback', [SocialController::class, 'callback'])->name('social.callback');
+Route::get('/search', [\App\Http\Controllers\SearchController::class, 'index'])->name('search');

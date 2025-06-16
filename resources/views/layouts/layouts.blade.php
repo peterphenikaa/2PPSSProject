@@ -58,30 +58,30 @@
                     <h3 class="text-center section-title">THƯƠNG HIỆU NỔI BẬT</h3>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8">
                         <!-- Nike -->
-                        <div class="brand-card flex flex-col items-center hover:text-blue-600">
+                        <a href="{{ route('products.brand', 'nike') }}" class="brand-card flex flex-col items-center hover:text-blue-600">
                             <img src="{{ asset('images/nike.png') }}" alt="Nike" class="brand-img mb-4">
                             <span class="font-medium text-gray-700 hover:text-inherit">NIKE</span>
-                        </div>
+                        </a>
                         <!-- Adidas -->
-                        <div class="brand-card flex flex-col items-center hover:text-blue-600">
+                        <a href="{{ route('products.brand', 'adidas') }}" class="brand-card flex flex-col items-center hover:text-blue-600">
                             <img src="{{ asset('images/adidas.png') }}" alt="Adidas" class="brand-img mb-4">
                             <span class="font-medium text-gray-700 hover:text-inherit">ADIDAS</span>
-                        </div>
+                        </a>
                         <!-- Puma -->
-                        <div class="brand-card flex flex-col items-center hover:text-blue-600">
+                        <a href="{{ route('products.brand', 'puma') }}" class="brand-card flex flex-col items-center hover:text-blue-600">
                             <img src="{{ asset('images/PUMA.png') }}" alt="Puma" class="brand-img mb-4">
                             <span class="font-medium text-gray-700 hover:text-inherit">PUMA</span>
-                        </div>
+                        </a>
                         <!-- Vans -->
-                        <div class="brand-card flex flex-col items-center hover:text-blue-600">
+                        <a href="{{ route('products.brand', 'vans') }}" class="brand-card flex flex-col items-center hover:text-blue-600">
                             <img src="{{ asset('images/Vans.png') }}" alt="Vans" class="brand-img mb-4">
                             <span class="font-medium text-gray-700 hover:text-inherit">VANS</span>
-                        </div>
+                        </a>
                         <!-- New Balance -->
-                        <div class="brand-card flex flex-col items-center hover:text-blue-600">
+                        <a href="{{ route('products.brand', 'newbalance') }}" class="brand-card flex flex-col items-center hover:text-blue-600">
                             <img src="{{ asset('images/new balance.png') }}" alt="New Balance" class="brand-img mb-4">
                             <span class="font-medium text-gray-700 hover:text-inherit">NEW BALANCE</span>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </section>
@@ -97,23 +97,21 @@
                                     ->get();
                         @endphp
                         @foreach($featuredBlogs as $blog)
-                        <div class="rounded-xl shadow hover:shadow-lg transition bg-white border border-gray-100 hover:border-indigo-400 flex flex-col overflow-hidden">
-                            <a href="/blogs?search={{ urlencode($blog->title) }}">
-                                <div class="w-full h-48 flex items-center justify-center overflow-hidden mb-3 bg-gray-50 rounded-t-lg">
-                                    @if($blog->image)
-                                        <img src="{{ asset('images/'.$blog->image) }}" alt="{{ $blog->title }}" class="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md">
-                                    @else
-                                        <div class="w-full h-full bg-gray-100 flex items-center justify-center">
-                                            <span class="material-icons-round text-gray-400 text-5xl">image_not_supported</span>
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="p-4 flex-1 flex flex-col">
-                                    <h4 class="font-semibold text-gray-800 text-base md:text-lg line-clamp-2 mb-2">{{ $blog->title }}</h4>
-                                    <p class="text-gray-500 text-xs md:text-sm mb-1 line-clamp-3">{!! Str::limit(strip_tags($blog->content), 100) !!}</p>
-                                </div>
-                            </a>
-                        </div>
+                        <a href="{{ route('shop.blog.show', $blog->slug) }}" class="rounded-xl shadow hover:shadow-lg transition bg-white border border-gray-100 hover:border-indigo-400 flex flex-col overflow-hidden">
+                            <div class="w-full h-48 flex items-center justify-center overflow-hidden mb-3 bg-gray-50 rounded-t-lg">
+                                @if($blog->image)
+                                    <img src="{{ asset('images/'.$blog->image) }}" alt="{{ $blog->title }}" class="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md">
+                                @else
+                                    <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                                        <span class="material-icons-round text-gray-400 text-5xl">image_not_supported</span>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="p-4 flex-1 flex flex-col">
+                                <h4 class="font-semibold text-gray-800 text-base md:text-lg line-clamp-2 mb-2">{{ $blog->title }}</h4>
+                                <p class="text-gray-500 text-xs md:text-sm mb-1 line-clamp-3">{!! Str::limit(strip_tags($blog->content), 100) !!}</p>
+                            </div>
+                        </a>
                         @endforeach
                     </div>
                 </div>
