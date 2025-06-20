@@ -36,7 +36,7 @@ class ProductSeeder extends Seeder
                     'name' => ucwords(str_replace('-', ' ', $baseName)),
                     'category' => 'Sneakers',
                     'description' => 'Mô tả sản phẩm ' . $baseName,
-                    'main_image' => $images[0], // 1 là ảnh chính
+                    // 'main_image' => $images[0], // 1 là ảnh chính
                     'available_sizes' => ['38', '39', '40', '41', '42', '43'],
                     'price' => rand(1000000, 5000000),
                     'stock' => rand(10, 100),
