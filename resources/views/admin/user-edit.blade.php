@@ -39,11 +39,19 @@
                         <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" required>
                     </div>
                     <div>
-                        <label class="block mb-1 font-semibold">Email</label>
-                        <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" required>
+                        <label for="email" class="block mb-1 font-semibold">Email</label>
+                        <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" required>
                     </div>
-                    <div class="flex gap-2 mt-4">
-                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors">Lưu</button>
+                    <div class="mt-4">
+                        <label for="password" class="block mb-1 font-semibold">Mật khẩu mới (bỏ trống nếu không đổi)</label>
+                        <input type="password" name="password" id="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500">
+                    </div>
+                    <div class="mt-4">
+                        <label for="password_confirmation" class="block mb-1 font-semibold">Xác nhận mật khẩu mới</label>
+                        <input type="password" name="password_confirmation" id="password_confirmation" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500">
+                    </div>
+                    <div class="flex gap-2 mt-6">
+                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 font-semibold transition-colors">Lưu</button>
                         <a href="{{ route('admin.user') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg font-semibold transition-colors">Hủy</a>
                     </div>
                 </form>

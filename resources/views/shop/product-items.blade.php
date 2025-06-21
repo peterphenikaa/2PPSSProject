@@ -513,6 +513,34 @@
                 .catch(error => console.error('Error loading wards:', error));
         }
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = document.getElementById(tab.dataset.tab);
+
+                    // Deactivate all tabs
+                    tabs.forEach(t => {
+                        t.classList.remove('border-black', 'text-black');
+                        t.classList.add('text-gray-500');
+                    });
+
+                    // Deactivate all content
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+
+                    // Activate the clicked tab and its content
+                    tab.classList.add('border-black', 'text-black');
+                    tab.classList.remove('text-gray-500');
+                    target.classList.remove('hidden');
+                });
+            });
+        });
+    </script>
 
     @section('meta_title', $product->name . ' - 2PSS Sneaker')
     @section('meta_description', Str::limit(strip_tags($product->description), 150))

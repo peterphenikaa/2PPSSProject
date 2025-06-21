@@ -21,10 +21,24 @@
             </div>
             <div class="flex justify-between items-center">
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Chi tiết đơn hàng</h1>
-                <a href="{{ route('admin.order') }}" class="btn-secondary">
-                    <span class="material-icons-round">arrow_back</span>
-                    Quay về danh sách
-                </a>
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('admin.order') }}" class="btn-secondary">
+                        <span class="material-icons-round">arrow_back</span>
+                        Quay về danh sách
+                    </a>
+                    <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn-primary">
+                        <span class="material-icons-round">edit</span>
+                        Chỉnh sửa
+                    </a>
+                    <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn đơn hàng này? Hành động này không thể hoàn tác.');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn-danger-outline">
+                            <span class="material-icons-round">delete</span>
+                            Xóa
+                        </button>
+                    </form>
+                </div>
             </div>
         </header>
 

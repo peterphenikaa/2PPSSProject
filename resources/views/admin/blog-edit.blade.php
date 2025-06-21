@@ -34,11 +34,23 @@
                     </div>
                     <p class="text-gray-500 mt-1.5 text-sm md:text-base">Chỉnh sửa nội dung bài viết hiện có</p>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2">
-                        <button id="helpBtnBlogEdit" class="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-all shadow-sm">
-                            <span class="material-icons-round">help_outline</span>
-                        </button>
+                <div class="relative flex items-center gap-4">
+                    <button id="helpBtnBlogEdit" class="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-all shadow-sm">
+                        <span class="material-icons-round">help_outline</span>
+                    </button>
+                    <!-- Popover hướng dẫn sử dụng -->
+                    <div id="helpPopoverBlogEdit" class="hidden absolute top-full right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 p-4 z-50">
+                        <h3 class="text-md font-bold mb-2 text-indigo-700 flex items-center gap-2">
+                            <span class="material-icons-round">help_outline</span> Hướng dẫn sửa bài viết
+                        </h3>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-1 text-sm">
+                            <li>Chỉnh sửa tiêu đề, nội dung hoặc trạng thái bài viết.</li>
+                            <li>Thay đổi ảnh đại diện mới hoặc giữ nguyên ảnh cũ.</li>
+                            <li>Nhấn "Cập nhật bài viết" để lưu thay đổi.</li>
+                        </ul>
+                        <div class="text-gray-500 text-xs mt-3 border-t pt-2">
+                            Cần hỗ trợ? Liên hệ <span class="font-semibold">support@2pss.vn</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -92,7 +104,9 @@
                                 <label for="image" class="form-label">Ảnh đại diện</label>
                                 <div id="current-image-blog" class="mb-2 flex flex-col items-center">
                                     @if($blog->image)
-                                        <img src="{{ asset('storage/'.$blog->image) }}" class="h-24 rounded shadow border">
+                                        <img src="{{ asset((str_starts_with($blog->image, 'blog_images/') || str_starts_with($blog->image, 'public/')) ? 'storage/' . $blog->image : 'images/' . $blog->image) }}" 
+                                             alt="Ảnh hiện tại" 
+                                             class="h-24 rounded shadow border">
                                         <div class="text-xs text-gray-600 mt-1">Ảnh đã tải lên: {{ basename($blog->image) }}</div>
                                     @endif
                                 </div>
@@ -130,39 +144,28 @@
             </div>
         </form>
 
-        <!-- Modal hướng dẫn sử dụng -->
-        <div id="helpModalBlogEdit" class="fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-40" style="display:none;">
-            <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative animate-fade-in mx-auto mt-24">
-                <button id="closeHelpModalBlogEdit" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700">
-                    <span class="material-icons-round">close</span>
-                </button>
-                <h2 class="text-xl font-bold mb-2 text-indigo-700 flex items-center gap-2">
-                    <span class="material-icons-round">help_outline</span> Hướng dẫn sửa bài viết Blog
-                </h2>
-                <ul class="list-disc pl-5 text-gray-700 space-y-1 mb-2">
-                    <li>Chỉnh sửa tiêu đề, nội dung hoặc trạng thái bài viết theo ý muốn.</li>
-                    <li>Có thể thay đổi ảnh đại diện mới hoặc giữ nguyên ảnh cũ.</li>
-                    <li>Nhấn "Cập nhật bài viết" để lưu thay đổi.</li>
-                    <li>Các trường bắt buộc sẽ có cảnh báo nếu bỏ trống.</li>
-                </ul>
-                <div class="text-gray-500 text-sm mt-2">
-                    Nếu cần hỗ trợ thêm, vui lòng liên hệ quản trị viên hệ thống.<br>
-                    <span class="font-semibold">Hotline:</span> 0123 456 789<br>
-                    <span class="font-semibold">Email:</span> support@2pss.vn
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
         const helpBtnBlogEdit = document.getElementById('helpBtnBlogEdit');
-        const helpModalBlogEdit = document.getElementById('helpModalBlogEdit');
-        const closeHelpModalBlogEdit = document.getElementById('closeHelpModalBlogEdit');
-        if (helpBtnBlogEdit && helpModalBlogEdit && closeHelpModalBlogEdit) {
-            helpBtnBlogEdit.addEventListener('click', () => helpModalBlogEdit.style.display = 'flex');
-            closeHelpModalBlogEdit.addEventListener('click', () => helpModalBlogEdit.style.display = 'none');
+        const helpPopoverBlogEdit = document.getElementById('helpPopoverBlogEdit');
+
+        if (helpBtnBlogEdit && helpPopoverBlogEdit) {
+            helpBtnBlogEdit.addEventListener('click', (event) => {
+                event.stopPropagation();
+                helpPopoverBlogEdit.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!helpPopoverBlogEdit.contains(event.target) && !helpBtnBlogEdit.contains(event.target)) {
+                    helpPopoverBlogEdit.classList.add('hidden');
+                }
+            });
+
             window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') helpModalBlogEdit.style.display = 'none';
+                if (e.key === 'Escape') {
+                    helpPopoverBlogEdit.classList.add('hidden');
+                }
             });
         }
 

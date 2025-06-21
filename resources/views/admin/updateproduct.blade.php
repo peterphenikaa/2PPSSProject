@@ -36,18 +36,24 @@
                     <p class="text-gray-500 mt-1.5 text-sm md:text-base">Cập nhật sản phẩm giày mới vào danh mục bán
                         hàng</p>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2">
-                        <button
-                            class="relative p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-all shadow-sm">
-                            <span class="material-icons-round">notifications</span>
-                            <span
-                                class="absolute top-0 right-0 h-2.5 w-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-                        </button>
-                        <button
-                            class="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-all shadow-sm">
-                            <span class="material-icons-round">help_outline</span>
-                        </button>
+                <div class="relative flex items-center gap-2">
+                    <button id="helpBtnUpdateProduct"
+                        class="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-all shadow-sm">
+                        <span class="material-icons-round">help_outline</span>
+                    </button>
+                    <!-- Popover hướng dẫn sử dụng -->
+                    <div id="helpPopoverUpdateProduct" class="hidden absolute top-full right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 p-4 z-50">
+                        <h3 class="text-md font-bold mb-2 text-indigo-700 flex items-center gap-2">
+                            <span class="material-icons-round">help_outline</span> Hướng dẫn cập nhật
+                        </h3>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-1 text-sm">
+                            <li>Chỉnh sửa các thông tin cần thiết của sản phẩm.</li>
+                            <li>Để thay đổi ảnh, hãy chọn một file ảnh mới.</li>
+                            <li>Nhấn "Lưu sản phẩm" để hoàn tất cập nhật.</li>
+                        </ul>
+                        <div class="text-gray-500 text-xs mt-3 border-t pt-2">
+                            Cần hỗ trợ? Liên hệ <span class="font-semibold">support@2pss.vn</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -96,7 +102,7 @@
                         <div class="space-y-4">
                             <div id="current-image-product" class="mb-2 flex flex-col items-center">
                                 @if ($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}" class="h-24 rounded shadow border">
+                                    <img src="{{ asset(str_starts_with($product->image, 'products/') ? 'storage/' . $product->image : 'images/' . $product->image) }}" alt="Ảnh hiện tại" class="h-24 rounded shadow">
                                     <div class="text-xs text-gray-600 mt-1">Ảnh đã tải lên: {{ basename($product->image) }}</div>
                                 @endif
                             </div>
@@ -179,6 +185,28 @@
 </body>
 
 <script>
+    const helpBtnUpdateProduct = document.getElementById('helpBtnUpdateProduct');
+    const helpPopoverUpdateProduct = document.getElementById('helpPopoverUpdateProduct');
+
+    if (helpBtnUpdateProduct && helpPopoverUpdateProduct) {
+        helpBtnUpdateProduct.addEventListener('click', (event) => {
+            event.stopPropagation();
+            helpPopoverUpdateProduct.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!helpPopoverUpdateProduct.contains(event.target) && !helpBtnUpdateProduct.contains(event.target)) {
+                helpPopoverUpdateProduct.classList.add('hidden');
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                helpPopoverUpdateProduct.classList.add('hidden');
+            }
+        });
+    }
+
 function previewUpdateProductImage(event) {
     const preview = document.getElementById('preview-image-update-product');
     const current = document.getElementById('current-image-product');

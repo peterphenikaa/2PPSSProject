@@ -21,35 +21,34 @@
             <div class="flex items-center justify-between">
                 <h1 class="text-2xl font-bold text-gray-800">Tổng quan hệ thống</h1>
                 <div class="flex items-center space-x-4">
-                    <button id="helpBtnDashboard" type="button" class="p-2 rounded-full hover:bg-gray-100" style="cursor:pointer">
-                        <span class="material-icons-round">help_outline</span>
-                    </button>
+                    <form action="/admin/search" method="GET" class="relative">
+                        <input type="text" name="query" placeholder="Tìm kiếm..." class="pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:border-indigo-500">
+                        <button type="submit" class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+                            <span class="material-icons-round">search</span>
+                        </button>
+                    </form>
+                    <div class="relative flex items-center gap-2">
+                        <button id="helpBtnDashboard" type="button" class="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors">
+                            <span class="material-icons-round">help_outline</span>
+                        </button>
+                        <!-- Popover hướng dẫn sử dụng -->
+                        <div id="helpPopoverDashboard" class="hidden absolute top-full right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 p-4 z-50">
+                            <h3 class="text-md font-bold mb-2 text-indigo-700 flex items-center gap-2">
+                                <span class="material-icons-round">help_outline</span> Hướng dẫn sử dụng
+                            </h3>
+                            <ul class="list-disc pl-5 text-gray-700 space-y-1 text-sm">
+                                <li>Đây là trang tổng quan hiển thị các số liệu chính.</li>
+                                <li>Các biểu đồ thể hiện doanh thu và đơn hàng theo thời gian.</li>
+                                <li>Bảng "Sản phẩm bán chạy" liệt kê các sản phẩm có doanh thu cao nhất.</li>
+                            </ul>
+                            <div class="text-gray-500 text-xs mt-3 border-t pt-2">
+                                Cần hỗ trợ? Liên hệ <span class="font-semibold">support@2pss.vn</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
-
-        <!-- Modal hướng dẫn sử dụng -->
-        <div id="helpModalDashboard" class="fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-40" style="display:none;">
-            <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative animate-fade-in mx-auto mt-24">
-                <button id="closeHelpModalDashboard" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700">
-                    <span class="material-icons-round">close</span>
-                </button>
-                <h2 class="text-xl font-bold mb-2 text-indigo-700 flex items-center gap-2">
-                    <span class="material-icons-round">help_outline</span> Hướng dẫn sử dụng Dashboard
-                </h2>
-                <ul class="list-disc pl-5 text-gray-700 space-y-1 mb-2">
-                    <li>Xem tổng quan số lượng đơn hàng, doanh thu, sản phẩm, khách hàng ở các thẻ thống kê phía trên.</li>
-                    <li>Xem biểu đồ doanh thu và phân loại đơn hàng ở phần biểu đồ.</li>
-                    <li>Xem danh sách đơn hàng gần đây ở cuối trang, nhấn "Chi tiết" để xem thông tin đơn hàng.</li>
-                    <li>Có thể truy cập nhanh các trang quản lý khác qua sidebar bên trái.</li>
-                </ul>
-                <div class="text-gray-500 text-sm mt-2">
-                    Nếu cần hỗ trợ thêm, vui lòng liên hệ quản trị viên hệ thống.<br>
-                    <span class="font-semibold">Hotline:</span> 0123 456 789<br>
-                    <span class="font-semibold">Email:</span> support@2pss.vn
-                </div>
-            </div>
-        </div>
 
         <!-- Content -->
         <div class="content-wrapper">
@@ -159,6 +158,29 @@
     </div>
 
     <script>
+        // Popover logic
+        const helpBtnDashboard = document.getElementById('helpBtnDashboard');
+        const helpPopoverDashboard = document.getElementById('helpPopoverDashboard');
+
+        if (helpBtnDashboard && helpPopoverDashboard) {
+            helpBtnDashboard.addEventListener('click', (event) => {
+                event.stopPropagation();
+                helpPopoverDashboard.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!helpPopoverDashboard.contains(event.target) && !helpBtnDashboard.contains(event.target)) {
+                    helpPopoverDashboard.classList.add('hidden');
+                }
+            });
+
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    helpPopoverDashboard.classList.add('hidden');
+                }
+            });
+        }
+
         // Revenue Chart
         const revenueCtx = document.getElementById('revenueChart').getContext('2d');
         new Chart(revenueCtx, {
@@ -166,45 +188,30 @@
             data: {
                 labels: {!! json_encode($revenueLabels) !!},
                 datasets: [{
-                    label: 'Doanh thu (VND)',
+                    label: 'Doanh thu',
                     data: {!! json_encode($revenueData) !!},
-                    backgroundColor: '#6366f1',
-                    borderRadius: 6,
-                    borderSkipped: false,
+                    backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                    borderColor: 'rgba(79, 70, 229, 1)',
+                    borderWidth: 1,
+                    borderRadius: 4,
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return '₫' + context.raw.toLocaleString('vi-VN');
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
                             }
                         }
                     }
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            drawBorder: false,
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return '₫' + value.toLocaleString('vi-VN');
-                            }
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false,
-                            drawBorder: false
-                        }
+                plugins: {
+                    legend: {
+                        display: false
                     }
                 }
             }
@@ -243,17 +250,6 @@
                 }
             }
         });
-
-        const helpBtnDashboard = document.getElementById('helpBtnDashboard');
-        const helpModalDashboard = document.getElementById('helpModalDashboard');
-        const closeHelpModalDashboard = document.getElementById('closeHelpModalDashboard');
-        if (helpBtnDashboard && helpModalDashboard && closeHelpModalDashboard) {
-            helpBtnDashboard.addEventListener('click', () => helpModalDashboard.style.display = 'flex');
-            closeHelpModalDashboard.addEventListener('click', () => helpModalDashboard.style.display = 'none');
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') helpModalDashboard.style.display = 'none';
-            });
-        }
     </script>
 </body>
 </html>

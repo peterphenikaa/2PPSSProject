@@ -9,15 +9,7 @@ class UserController
 {
     public function user()
     {
-        $users = User::where('role','user')->get()->map(function ($user) {
-            return [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'created_at' => $user->created_at ? $user->created_at->format('d/m/Y H:i') : '',
-                'updated_at' => $user->updated_at ? $user->updated_at->format('d/m/Y H:i') : '',
-            ];
-        })->toArray();
+        $users = User::where('role','user')->latest()->paginate(10);
         return view('admin.user',compact('users'));
     }
     public function search(Request $request)
@@ -30,16 +22,7 @@ class UserController
                     ->orWhere('email', 'like', "%$q%") ;
             })
             ->latest()
-            ->get()
-            ->map(function ($user) {
-                return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'created_at' => optional($user->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => optional($user->updated_at)->format('Y-m-d H:i:s'),
-                ];
-            })->toArray();
+            ->paginate(10);
         return view('admin.user', [
             'users' => $users,
         ]);
@@ -56,11 +39,17 @@ class UserController
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'password' => 'nullable|min:8|confirmed',
         ]);
         $user->name = $request->name;
         $user->email = $request->email;
+
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+        }
+        
         $user->save();
-        return redirect()->route('admin.user')->with('success', 'Cập nhật tài khoản thành công!');
+        return redirect()->route('admin.user')->with('success', 'Cập nhật khách hàng thành công!');
     }
 
     public function destroy($id)

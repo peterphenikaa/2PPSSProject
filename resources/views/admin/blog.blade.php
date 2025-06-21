@@ -43,41 +43,31 @@
                             </a>
                         @endif
                     </form>
-                    <div class="flex items-center gap-2">
+                    <div class="relative flex items-center gap-2">
                         <button id="helpBtnBlog" type="button"
                             class="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors"
                             style="cursor:pointer">
                             <span class="material-icons-round">help_outline</span>
                         </button>
+                        <!-- Popover hướng dẫn sử dụng -->
+                        <div id="helpPopoverBlog" class="hidden absolute top-full right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 p-4 z-50">
+                            <h3 class="text-md font-bold mb-2 text-indigo-700 flex items-center gap-2">
+                                <span class="material-icons-round">help_outline</span> Hướng dẫn sử dụng
+                            </h3>
+                            <ul class="list-disc pl-5 text-gray-700 space-y-1 text-sm">
+                                <li>Tìm kiếm bài viết theo tiêu đề.</li>
+                                <li>Nhấn nút <span class="material-icons-round text-sm align-middle">edit</span> để sửa bài viết.</li>
+                                <li>Nhấn nút <span class="material-icons-round text-sm align-middle text-red-600">delete</span> để xóa.</li>
+                                <li>Nhấn vào ảnh để xem ảnh lớn hơn.</li>
+                            </ul>
+                            <div class="text-gray-500 text-xs mt-3 border-t pt-2">
+                                Cần hỗ trợ? Liên hệ <span class="font-semibold">support@2pss.vn</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </header>
-        <!-- Modal hướng dẫn sử dụng -->
-        <div id="helpModalBlog" class="fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-40"
-            style="display:none;">
-            <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative animate-fade-in mx-auto mt-24">
-                <button id="closeHelpModalBlog" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700">
-                    <span class="material-icons-round">close</span>
-                </button>
-                <h2 class="text-xl font-bold mb-2 text-indigo-700 flex items-center gap-2">
-                    <span class="material-icons-round">help_outline</span> Hướng dẫn sử dụng
-                </h2>
-                <ul class="list-disc pl-5 text-gray-700 space-y-1 mb-2">
-                    <li>Tìm kiếm bài viết theo tiêu đề bằng ô tìm kiếm phía trên.</li>
-                    <li>Nhấn nút <span class="material-icons-round text-sm align-middle">edit</span> để sửa bài viết.
-                    </li>
-                    <li>Nhấn nút <span class="material-icons-round text-sm align-middle text-red-600">delete</span> để
-                        xóa bài viết (cần xác nhận).</li>
-                    <li>Nhấn nút "Tạo" để thêm bài viết mới.</li>
-                </ul>
-                <div class="text-gray-500 text-sm mt-2">
-                    Nếu cần hỗ trợ thêm, vui lòng liên hệ quản trị viên hệ thống.<br>
-                    <span class="font-semibold">Hotline:</span> 0123 456 789<br>
-                    <span class="font-semibold">Email:</span> support@2pss.vn
-                </div>
-            </div>
-        </div>
         <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 mt-4">
             <div class="px-6 py-4 flex items-center justify-between border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Danh sách bài viết</h2>
@@ -113,11 +103,14 @@
                                 <td>{{ $blog->title }}</td>
                                 <td>
                                     @if ($blog->image)
-                                        <button type="button" class="show-image-btn" data-imgsrc="{{ asset((str_starts_with($blog->image, 'blog_images/') || str_starts_with($blog->image, 'public/')) ? 'storage/' . $blog->image : 'images/' . $blog->image) }}" title="Xem ảnh lớn" style="background:none;border:none;outline:none;cursor:pointer;">
-                                            <span class="material-icons-round text-indigo-500" style="font-size:32px;">image</span>
-                                        </button>
+                                    <img src="{{ asset((str_starts_with($blog->image, 'blog_images/') || str_starts_with($blog->image, 'public/')) ? 'storage/' . $blog->image : 'images/' . $blog->image) }}" 
+                                         alt="{{ $blog->title }}" 
+                                         class="w-16 h-12 object-cover rounded-md cursor-pointer show-image-btn"
+                                         data-imgsrc="{{ asset((str_starts_with($blog->image, 'blog_images/') || str_starts_with($blog->image, 'public/')) ? 'storage/' . $blog->image : 'images/' . $blog->image) }}">
                                     @else
-                                        <span class="material-icons-round text-gray-400" style="font-size:32px;">image_not_supported</span>
+                                        <div class="w-16 h-12 flex items-center justify-center bg-gray-100 rounded-md text-gray-400">
+                                            <span class="material-icons-round">image_not_supported</span>
+                                        </div>
                                     @endif
                                 </td>
                                 <td>
@@ -167,15 +160,27 @@
     </div>
     <script>
         const helpBtnBlog = document.getElementById('helpBtnBlog');
-        const helpModalBlog = document.getElementById('helpModalBlog');
-        const closeHelpModalBlog = document.getElementById('closeHelpModalBlog');
-        if (helpBtnBlog && helpModalBlog && closeHelpModalBlog) {
-            helpBtnBlog.addEventListener('click', () => helpModalBlog.style.display = 'flex');
-            closeHelpModalBlog.addEventListener('click', () => helpModalBlog.style.display = 'none');
+        const helpPopoverBlog = document.getElementById('helpPopoverBlog');
+
+        if (helpBtnBlog && helpPopoverBlog) {
+            helpBtnBlog.addEventListener('click', (event) => {
+                event.stopPropagation();
+                helpPopoverBlog.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!helpPopoverBlog.contains(event.target) && !helpBtnBlog.contains(event.target)) {
+                    helpPopoverBlog.classList.add('hidden');
+                }
+            });
+
             window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') helpModalBlog.style.display = 'none';
+                if (e.key === 'Escape') {
+                    helpPopoverBlog.classList.add('hidden');
+                }
             });
         }
+
         document.querySelectorAll('.show-image-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.getElementById('modalImage').src = this.getAttribute('data-imgsrc');

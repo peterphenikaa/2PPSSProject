@@ -87,7 +87,7 @@ class CartController extends Controller
         $cartItemId = $request->id;
         
         if (!isset($cart[$cartItemId])) {
-            return back()->with('error', 'Sản phẩm không tồn tại trong giỏ hàng.');
+            return back()->with('error', 'Sản phẩm không có trong giỏ hàng.');
         }
 
         // Get the original item and remove it
@@ -111,7 +111,7 @@ class CartController extends Controller
         
         session()->put('cart', $cart);
 
-        return redirect()->route('cart.index')->with('success', 'Giỏ hàng đã được cập nhật!');
+        return redirect()->route('cart.index')->with('success', 'Giỏ hàng đã được cập nhật thành công!');
     }
 
     /**
@@ -127,10 +127,10 @@ class CartController extends Controller
         if (isset($cart[$cartItemId])) {
             unset($cart[$cartItemId]);
             session()->put('cart', $cart);
-            return redirect()->route('cart.index')->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng.');
+            return redirect()->route('cart.index')->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng thành công.');
         }
 
-        return redirect()->route('cart.index')->with('error', 'Không tìm thấy sản phẩm trong giỏ hàng.');
+        return redirect()->route('cart.index')->with('error', 'Không tìm thấy sản phẩm để xóa.');
     }
 
     // Hiển thị form checkout
@@ -138,7 +138,7 @@ class CartController extends Controller
     {
         $cart = session('cart', []);
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống!');
+            return redirect()->route('cart.index')->with('error', 'Giỏ hàng của bạn đang trống!');
         }
         $total = array_reduce($cart, function ($carry, $item) {
             return $carry + ($item['price'] * $item['quantity']);
@@ -161,7 +161,7 @@ class CartController extends Controller
         ]);
         $cart = session('cart', []);
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống!');
+            return redirect()->route('cart.index')->with('error', 'Giỏ hàng của bạn đang trống!');
         }
         $totalPrice = array_reduce($cart, function ($carry, $item) {
             return $carry + ($item['price'] * $item['quantity']);

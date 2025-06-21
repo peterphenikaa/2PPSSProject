@@ -110,4 +110,36 @@ class OrderController
         $order->save();
         return redirect()->route('admin.orders.show', $order->id)->with('success', 'Cập nhật trạng thái thành công!');
     }
+    public function destroy($id)
+    {
+        $order = Order::findOrFail($id);
+        // Xóa các order items liên quan trước để đảm bảo không có lỗi khóa ngoại
+        $order->orderItems()->delete();
+        $order->delete();
+        return redirect()->route('admin.order')->with('success', 'Đã xóa đơn hàng thành công!');
+    }
+
+    public function edit($id)
+    {
+        $order = Order::findOrFail($id);
+        return view('admin.order-edit', compact('order'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        $validated = $request->validate([
+            'recipient_name' => 'required|string|max:255',
+            'recipient_phone' => 'required|string|max:20',
+            'province' => 'required|string|max:255',
+            'district' => 'required|string|max:255',
+            'ward' => 'required|string|max:255',
+            'address_detail' => 'required|string|max:255',
+        ]);
+
+        $order->update($validated);
+
+        return redirect()->route('admin.orders.show', $order->id)->with('success', 'Đã cập nhật thông tin đơn hàng thành công!');
+    }
 }

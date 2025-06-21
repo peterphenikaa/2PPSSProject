@@ -13,3 +13,33 @@ span {
 .material-icons-round {
     font-family: 'Material Icons Round' !important;
 }
+
+@layer components {
+    .btn-danger {
+        @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+    }
+
+    .btn-danger-outline {
+        @apply bg-transparent text-red-600 border-red-500 hover:bg-red-50 focus:ring-red-500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s;
+        border-width: 1px;
+    }
+
+    .table-header {
+        @apply px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+    }
+}

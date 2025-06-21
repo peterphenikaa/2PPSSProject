@@ -45,4 +45,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     });
 
     Route::post('/admin/orders/{id}/update-status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+    Route::delete('/admin/orders/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
+    Route::get('/admin/orders/{id}/edit', [OrderController::class, 'edit'])->name('admin.orders.edit');
+    Route::put('/admin/orders/{id}', [OrderController::class, 'update'])->name('admin.orders.update');
 });

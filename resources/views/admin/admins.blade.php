@@ -30,44 +30,36 @@
                     </p>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2">
+                    <form class="relative flex items-center">
+                        <input type="text" name="q" value="{{ request('q') }}"
+                            placeholder="Tìm kiếm quản trị viên..."
+                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 w-64">
+                        <span class="material-icons-round absolute left-3 top-2.5 text-gray-400">search</span>
+                    </form>
+                    <div class="relative flex items-center gap-2">
                         <button id="helpBtnAdmin" type="button"
                             class="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors"
                             style="cursor:pointer">
                             <span class="material-icons-round">help_outline</span>
                         </button>
+                        <!-- Popover hướng dẫn sử dụng -->
+                        <div id="helpPopoverAdmin" class="hidden absolute top-full right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 p-4 z-50">
+                            <h3 class="text-md font-bold mb-2 text-indigo-700 flex items-center gap-2">
+                                <span class="material-icons-round">help_outline</span> Hướng dẫn sử dụng
+                            </h3>
+                            <ul class="list-disc pl-5 text-gray-700 space-y-1 text-sm">
+                                <li>Trang này liệt kê tất cả các tài khoản quản trị viên.</li>
+                                <li>Nhấn nút <span class="material-icons-round text-sm align-middle">edit</span> để chỉnh sửa vai trò.</li>
+                                <li>Không thể xóa tài khoản quản trị viên từ giao diện này.</li>
+                            </ul>
+                            <div class="text-gray-500 text-xs mt-3 border-t pt-2">
+                                Cần hỗ trợ? Liên hệ <span class="font-semibold">support@2pss.vn</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </header>
-        <!-- Modal hướng dẫn sử dụng -->
-        <div id="helpModalAdmin"
-            class="fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-40"
-            style="display:none;">
-            <div
-                class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative animate-fade-in mx-auto mt-24">
-                <button id="closeHelpModalAdmin"
-                    class="absolute top-2 right-2 text-gray-400 hover:text-gray-700">
-                    <span class="material-icons-round">close</span>
-                </button>
-                <h2 class="text-xl font-bold mb-2 text-indigo-700 flex items-center gap-2">
-                    <span class="material-icons-round">help_outline</span> Hướng dẫn sử dụng
-                </h2>
-                <ul class="list-disc pl-5 text-gray-700 space-y-1 mb-2">
-                    <li>Xem danh sách quản trị viên, thông tin chi tiết từng admin.</li>
-                    <li>Nhấn nút <span class="material-icons-round text-sm align-middle">edit</span> để sửa thông tin
-                        admin.</li>
-                    <li>Nhấn nút <span class="material-icons-round text-sm align-middle text-red-600">delete</span>
-                        để xóa admin (cần xác nhận).</li>
-                    <li>Chỉ nên xóa admin khi chắc chắn, tránh xóa nhầm tài khoản quản trị.</li>
-                </ul>
-                <div class="text-gray-500 text-sm mt-2">
-                    Nếu cần hỗ trợ thêm, vui lòng liên hệ quản trị viên hệ thống.<br>
-                    <span class="font-semibold">Hotline:</span> 0123 456 789<br>
-                    <span class="font-semibold">Email:</span> support@2pss.vn
-                </div>
-            </div>
-        </div>
         <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 mt-4">
             <div class="px-6 py-4 flex items-center justify-between border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Danh sách quản trị viên</h2>
@@ -116,13 +108,24 @@
     </div>
     <script>
         const helpBtnAdmin = document.getElementById('helpBtnAdmin');
-        const helpModalAdmin = document.getElementById('helpModalAdmin');
-        const closeHelpModalAdmin = document.getElementById('closeHelpModalAdmin');
-        if (helpBtnAdmin && helpModalAdmin && closeHelpModalAdmin) {
-            helpBtnAdmin.addEventListener('click', () => helpModalAdmin.style.display = 'flex');
-            closeHelpModalAdmin.addEventListener('click', () => helpModalAdmin.style.display = 'none');
+        const helpPopoverAdmin = document.getElementById('helpPopoverAdmin');
+
+        if (helpBtnAdmin && helpPopoverAdmin) {
+            helpBtnAdmin.addEventListener('click', (event) => {
+                event.stopPropagation();
+                helpPopoverAdmin.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!helpPopoverAdmin.contains(event.target) && !helpBtnAdmin.contains(event.target)) {
+                    helpPopoverAdmin.classList.add('hidden');
+                }
+            });
+
             window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') helpModalAdmin.style.display = 'none';
+                if (e.key === 'Escape') {
+                    helpPopoverAdmin.classList.add('hidden');
+                }
             });
         }
     </script>
