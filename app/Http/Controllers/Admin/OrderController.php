@@ -51,14 +51,14 @@ class OrderController
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'selected_size' => 'required|string',
+            'size' => 'required|string',
             'recipient_name' => 'required|string|max:255',
             'recipient_phone' => 'required|string|max:20',
             'province' => 'required|string|max:255',
             'district' => 'required|string|max:255',
             'ward' => 'required|string|max:255',
             'address_detail' => 'required|string|max:255',
-            'payment_method' => 'required|in:cod,bank_transfer',
+            'payment_method' => 'required|in:cod,momo_qr',
         ]);
 
         $order = Order::create([
@@ -71,7 +71,7 @@ class OrderController
             'address_detail' => $request->address_detail,
             'payment_method' => $request->payment_method,
             'total_price' => $request->price,
-            'status' => 'Chờ xác nhận',
+            'status' => $request->payment_method === 'momo_qr' ? 'Chờ thanh toán Momo' : 'Chờ xác nhận',
         ]);
 
         OrderItem::create([
@@ -79,10 +79,21 @@ class OrderController
             'product_id' => $request->product_id,
             'quantity' => 1,
             'price' => $request->price,
-            'size' => $request->selected_size,
+            'size' => $request->size,
         ]);
 
-        return redirect()->back()->with('success', 'Đặt hàng thành công!');
+        if ($request->payment_method === 'momo_qr') {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['redirect_url' => route('cart.momo_qr', ['order' => $order->id])]);
+            }
+            return redirect()->route('cart.momo_qr', ['order' => $order->id]);
+        }
+        
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => 'Đặt hàng thành công!', 'redirect_url' => '/']);
+        }
+
+        return redirect('/')->with('success', 'Đặt hàng thành công!');
     }
     public function show($id)
     {

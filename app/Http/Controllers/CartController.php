@@ -61,6 +61,14 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => 'Đã thêm sản phẩm vào giỏ hàng!',
+                'cart' => $cart,
+                'cart_count' => count($cart)
+            ]);
+        }
+
         return back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng!');
     }
     

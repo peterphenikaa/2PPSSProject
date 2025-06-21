@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\CreateProductController;
 use App\Http\Controllers\Admin\UpdateProductController;
 use App\Http\Controllers\Admin\BlogController;
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/orders', [OrderController::class, 'order'])->name('admin.order');
     Route::get('/admin/orders/search', [OrderController::class, 'search'])->name('admin.orders.search');

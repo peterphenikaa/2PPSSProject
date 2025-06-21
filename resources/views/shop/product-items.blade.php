@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Chi tiết sản phẩm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     @vite('resources/css/product-items.css')
@@ -62,7 +63,8 @@
                                 Mua ngay
                             </button>
                             <button
-                                class="add-to-cart-btn w-full bg-white border border-black text-black py-3 rounded-md hover:bg-gray-100 transition duration-200 font-medium">
+                                class="add-to-cart-btn w-full bg-white border border-black text-black py-3 rounded-md hover:bg-gray-100 transition duration-200 font-medium"
+                                data-product-id="{{ $product->id }}">
                                 Thêm vào giỏ hàng
                             </button>
                         </div>
@@ -238,7 +240,8 @@
             <form id="order-form" action="{{ route('orders.store') }}" method="POST" class="address-form">
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <input type="hidden" name="selected_size" id="selected_size">
+                <input type="hidden" name="size" id="size_popup_input">
+                <input type="hidden" name="quantity" value="1">
                 <input type="hidden" name="price" value="{{ $product->price }}">
 
                 <div class="form-group">
@@ -281,13 +284,13 @@
                     <label for="payment_method">Phương thức thanh toán:</label>
                     <select id="payment_method" name="payment_method" class="w-full border p-2 rounded">
                         <option value="cod">Thanh toán khi nhận hàng</option>
-                        <option value="bank_transfer">Chuyển khoản</option>
+                        <option value="momo_qr">Thanh toán bằng Momo QR</option>
                     </select>
                 </div>
                 
-                <button type="submit" class="submit-btn" id="submit-btn">
-                    Xác nhận mua hàng
-                    <span class="loading hidden"></span>
+                <button type="submit" id="submit-btn" class="w-full bg-black text-white py-3 rounded-md">
+                    <span class="btn-text">Đặt hàng ngay</span>
+                    <span class="loading hidden">Đang xử lý...</span>
                 </button>
             </form>
         </div>
@@ -296,114 +299,148 @@
     @include('layouts.footer')
 
     <script>
-        const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
-        
         document.addEventListener("DOMContentLoaded", function () {
-            // Tab switching
-            const tabButtons = document.querySelectorAll('.tab-button');
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabId = button.dataset.tab;
-                    
-                    // Update active tab button
-                    tabButtons.forEach(btn => {
-                        btn.classList.remove('border-black', 'text-black');
-                        btn.classList.add('text-gray-500');
-                    });
-                    button.classList.add('border-black', 'text-black');
-                    button.classList.remove('text-gray-500');
-                    
-                    // Show corresponding tab content
-                    document.querySelectorAll('.tab-content').forEach(content => {
-                        content.classList.add('hidden');
-                    });
-                    document.getElementById(tabId).classList.remove('hidden');
-                });
-            });
-            
-            // Size selection
+            const isLoggedIn = @json(auth()->check());
+            let selectedSize = null;
+
+            // --- DOM Elements ---
             const sizeOptions = document.querySelectorAll('.size-option');
-            const selectedSizeInput = document.getElementById('selected_size');
             const buyNowBtn = document.querySelector('.buy-now-btn');
             const addToCartBtn = document.querySelector('.add-to-cart-btn');
             const orderPopup = document.getElementById('order-popup');
             const closePopup = document.getElementById('close-popup');
+            const orderForm = document.getElementById('order-form');
+            const sizePopupInput = document.getElementById('size_popup_input');
+
+            // --- Event Handlers ---
             
+            // 1. Size Selection
             sizeOptions.forEach(option => {
                 option.addEventListener('click', () => {
                     sizeOptions.forEach(o => o.classList.remove('bg-black', 'text-white'));
                     option.classList.add('bg-black', 'text-white');
-                    selectedSizeInput.value = option.dataset.size;
+                    selectedSize = option.dataset.size;
                 });
             });
-            
-            buyNowBtn.addEventListener('click', () => {
-                if (!isLoggedIn) {
-                    alert("Vui lòng đăng nhập để mua hàng");
-                    window.location.href = "{{ route('login') }}";
-                    return;
-                }
-                if (!selectedSizeInput.value) {
-                    alert("Vui lòng chọn size trước khi mua hàng.");
-                    return;
-                }
-                // Show the popup
-                orderPopup.classList.add('active');
-            });
-            
-            addToCartBtn.addEventListener('click', () => {
-                if (!isLoggedIn) {
-                    alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
-                    window.location.href = "{{ route('login') }}";
-                    return;
-                }
-                if (!selectedSizeInput.value) {
-                    alert("Vui lòng chọn size trước khi thêm vào giỏ hàng.");
-                    return;
-                }
-                // Gửi request thêm vào giỏ hàng
-                fetch("{{ route('cart.add') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        product_id: {{ $product->id }},
-                        size: selectedSizeInput.value
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Đã thêm vào giỏ hàng!');
-                    } else {
-                        alert('Có lỗi xảy ra khi thêm vào giỏ hàng!');
+
+            // 2. "Buy Now" Button
+            if (buyNowBtn) {
+                buyNowBtn.addEventListener('click', () => {
+                    if (!isLoggedIn) {
+                        alert("Vui lòng đăng nhập để mua hàng.");
+                        window.location.href = "{{ route('login') }}";
+                        return;
                     }
-                })
-                .catch(() => alert('Có lỗi xảy ra khi thêm vào giỏ hàng!'));
-            });
+                    if (!selectedSize) {
+                        alert("Vui lòng chọn size trước khi mua hàng.");
+                        return;
+                    }
+                    sizePopupInput.value = selectedSize;
+                    orderPopup.classList.add('active');
+                });
+            }
             
-            // Close popup
-            closePopup.addEventListener('click', () => {
-                orderPopup.classList.remove('active');
-            });
-            
-            // Close popup when clicking outside
-            orderPopup.addEventListener('click', (e) => {
-                if (e.target === orderPopup) {
-                    orderPopup.classList.remove('active');
-                }
-            });
-            
-            // Load provinces from API
+            // 3. "Add to Cart" Button
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', () => {
+                    if (!isLoggedIn) {
+                        alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+                        window.location.href = "{{ route('login') }}";
+                        return;
+                    }
+                    if (!selectedSize) {
+                        alert("Vui lòng chọn size trước khi thêm vào giỏ hàng.");
+                        return;
+                    }
+                    
+                    const productId = addToCartBtn.dataset.productId;
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    const formData = new FormData();
+                    formData.append('product_id', productId);
+                    formData.append('size', selectedSize);
+                    formData.append('quantity', 1);
+
+                    fetch("{{ route('cart.add') }}", {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.success);
+                        } else {
+                            alert('Có lỗi xảy ra khi thêm vào giỏ hàng!');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Có lỗi xảy ra khi thêm vào giỏ hàng!');
+                    });
+                });
+            }
+
+            // 4. Popup Handling (Close)
+            if (closePopup) {
+                closePopup.addEventListener('click', () => orderPopup.classList.remove('active'));
+            }
+            if (orderPopup) {
+                orderPopup.addEventListener('click', (e) => {
+                    if (e.target === orderPopup) {
+                        orderPopup.classList.remove('active');
+                    }
+                });
+            }
+
+            // 5. Order Form Submission
+            if(orderForm) {
+                orderForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const submitBtn = this.querySelector('#submit-btn');
+                    const loading = submitBtn.querySelector('.loading');
+                    const btnText = submitBtn.querySelector('.btn-text');
+                    
+                    submitBtn.disabled = true;
+                    if (btnText) btnText.classList.add('hidden');
+                    if (loading) loading.classList.remove('hidden');
+
+                    fetch(this.action, {
+                        method: 'POST',
+                        body: new FormData(this),
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.redirect_url) {
+                            window.location.href = data.redirect_url;
+                        } else {
+                             alert(data.success || 'Đặt hàng thành công!');
+                             window.location.href = '/';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
+                        submitBtn.disabled = false;
+                        if (btnText) btnText.classList.remove('hidden');
+                        if (loading) loading.classList.add('hidden');
+                    });
+                });
+            }
+
+            // --- Address API ---
             loadProvinces();
-            
-            // Province change event
             document.getElementById('province').addEventListener('change', function() {
                 const provinceId = this.value;
                 const districtSelect = document.getElementById('district');
-                
                 if (provinceId) {
                     districtSelect.disabled = false;
                     loadDistricts(provinceId);
@@ -414,12 +451,9 @@
                     document.getElementById('ward').innerHTML = '<option value="">Chọn phường/xã</option>';
                 }
             });
-            
-            // District change event
             document.getElementById('district').addEventListener('change', function() {
                 const districtId = this.value;
                 const wardSelect = document.getElementById('ward');
-                
                 if (districtId) {
                     wardSelect.disabled = false;
                     loadWards(districtId);
@@ -428,33 +462,9 @@
                     wardSelect.innerHTML = '<option value="">Chọn phường/xã</option>';
                 }
             });
-            
-            // Form submission
-            document.getElementById('order-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const submitBtn = document.getElementById('submit-btn');
-                const loading = submitBtn.querySelector('.loading');
-                
-                submitBtn.disabled = true;
-                loading.classList.remove('hidden');
-                
-                // Simulate API call (replace with actual form submission)
-                setTimeout(() => {
-                    // Here you would normally submit the form
-                    // For demo purposes, we'll just show an alert
-                    alert('Đặt hàng thành công!');
-                    orderPopup.classList.remove('active');
-                    submitBtn.disabled = false;
-                    loading.classList.add('hidden');
-                    
-                    // Uncomment to actually submit the form
-                    // this.submit();
-                }, 1500);
-            });
         });
         
-        // Load provinces from API
+        // --- API Functions ---
         function loadProvinces() {
             fetch('https://provinces.open-api.vn/api/')
                 .then(response => response.json())
@@ -467,58 +477,40 @@
                         provinceSelect.appendChild(option);
                     });
                 })
-                .catch(error => {
-                    console.error('Error loading provinces:', error);
-                    alert('Không thể tải danh sách tỉnh/thành phố. Vui lòng thử lại sau.');
-                });
+                .catch(error => console.error('Error loading provinces:', error));
         }
-        
-        // Load districts based on province
         function loadDistricts(provinceId) {
             fetch(`https://provinces.open-api.vn/api/p/${provinceId}?depth=2`)
                 .then(response => response.json())
                 .then(province => {
                     const districtSelect = document.getElementById('district');
                     districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
-                    
                     province.districts.forEach(district => {
                         const option = document.createElement('option');
                         option.value = district.code;
                         option.textContent = district.name;
                         districtSelect.appendChild(option);
                     });
-                    
-                    // Reset ward select
                     document.getElementById('ward').disabled = true;
                     document.getElementById('ward').innerHTML = '<option value="">Chọn phường/xã</option>';
                 })
-                .catch(error => {
-                    console.error('Error loading districts:', error);
-                    alert('Không thể tải danh sách quận/huyện. Vui lòng thử lại sau.');
-                });
+                .catch(error => console.error('Error loading districts:', error));
         }
-        
-        // Load wards based on district
         function loadWards(districtId) {
             fetch(`https://provinces.open-api.vn/api/d/${districtId}?depth=2`)
                 .then(response => response.json())
                 .then(district => {
                     const wardSelect = document.getElementById('ward');
                     wardSelect.innerHTML = '<option value="">Chọn phường/xã</option>';
-                    
                     district.wards.forEach(ward => {
                         const option = document.createElement('option');
                         option.value = ward.code;
                         option.textContent = ward.name;
                         wardSelect.appendChild(option);
                     });
-                    
                     wardSelect.disabled = false;
                 })
-                .catch(error => {
-                    console.error('Error loading wards:', error);
-                    alert('Không thể tải danh sách phường/xã. Vui lòng thử lại sau.');
-                });
+                .catch(error => console.error('Error loading wards:', error));
         }
     </script>
 

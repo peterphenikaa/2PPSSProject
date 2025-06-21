@@ -17,7 +17,7 @@
 
     @if(empty($cart))
         <p class="text-gray-500">Giỏ hàng của bạn đang trống.</p>
-        <a href="{{ url('/') }}" class="text-blue-600 hover:underline">Tiếp tục mua sắm</a>
+        <a href="{{ url('/products/sneakers') }}" class="text-blue-600 hover:underline">Tiếp tục mua sắm</a>
     @else
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white border border-gray-200 mb-6">
@@ -89,7 +89,7 @@
             </table>
         </div>
         <div class="flex justify-between items-center mt-6">
-            <a href="{{ url('/') }}" class="text-blue-600 hover:underline">&larr; Tiếp tục mua sắm</a>
+            <a href="{{ url('/products/sneakers') }}" class="text-blue-600 hover:underline">&larr; Tiếp tục mua sắm</a>
             <div class="text-right">
                 <p class="text-lg">Tổng cộng: <span class="font-bold text-xl text-green-600">{{ number_format($total) }}₫</span></p>
                 <a href="{{ route('cart.checkout') }}" class="mt-2 inline-block bg-black text-white px-8 py-3 rounded hover:bg-gray-800 transition font-semibold">Tiến hành thanh toán</a>
