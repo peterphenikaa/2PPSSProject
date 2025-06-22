@@ -90,7 +90,6 @@
                 <label for="payment_method" class="block font-semibold mb-1 text-gray-800">Phương thức thanh toán</label>
                 <select id="payment_method" name="payment_method" class="w-full border border-gray-300 rounded-lg p-3">
                     <option value="cod">Thanh toán khi nhận hàng</option>
-                    <option value="bank_transfer">Chuyển khoản</option>
                     <option value="momo_qr">Thanh toán Momo/VietQR (quét mã QR)</option>
                 </select>
             </div>
