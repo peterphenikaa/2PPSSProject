@@ -10,23 +10,18 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    /**
-     * Display the shopping cart.
-     */
+    
     public function index()
     {
         $cart = session()->get('cart', []);
         
-        // Eager load products to avoid N+1 problem
         $productIds = array_map(fn($item) => $item['product_id'], $cart);
+       
         $products = Product::findMany($productIds)->keyBy('id');
 
         return view('cart.index', compact('cart', 'products'));
     }
-
-    /**
-     * Add an item to the cart.
-     */
+    
     public function add(Request $request)
     {
         $request->validate([
@@ -34,21 +29,15 @@ class CartController extends Controller
             'size' => 'required',
             'quantity' => 'required|integer|min:1',
         ]);
-
         $productId = $request->product_id;
         $size = $request->size;
         $quantity = (int)$request->quantity;
-
         $product = Product::findOrFail($productId);
-        
         $cart = session()->get('cart', []);
-        $cartItemId = $productId . '_' . $size; // Unique ID for product + size
-
-        // If item with the same size already exists, update quantity
+        $cartItemId = $productId . '_' . $size; 
         if (isset($cart[$cartItemId])) {
             $cart[$cartItemId]['quantity'] += $quantity;
         } else {
-            // Add new item
             $cart[$cartItemId] = [
                 'product_id' => $productId,
                 'name' => $product->name,
@@ -58,9 +47,7 @@ class CartController extends Controller
                 'quantity' => $quantity,
             ];
         }
-
         session()->put('cart', $cart);
-
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'success' => 'Đã thêm sản phẩm vào giỏ hàng!',
@@ -68,13 +55,9 @@ class CartController extends Controller
                 'cart_count' => count($cart)
             ]);
         }
-
         return back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng!');
     }
     
-    /**
-     * Update an item in the cart.
-     */
     public function update(Request $request)
     {
         $request->validate([
@@ -82,41 +65,26 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
             'size' => 'required|string',
         ]);
-
         $cart = session()->get('cart', []);
         $cartItemId = $request->id;
         
         if (!isset($cart[$cartItemId])) {
             return back()->with('error', 'Sản phẩm không có trong giỏ hàng.');
         }
-
-        // Get the original item and remove it
         $item = $cart[$cartItemId];
         unset($cart[$cartItemId]);
-
-        // Create a new ID based on the new size
         $newCartItemId = $item['product_id'] . '_' . $request->size;
-        
-        // Set new details
         $item['size'] = $request->size;
         $item['quantity'] = (int)$request->quantity;
-
-        // If an item with the new size already exists, merge quantities.
-        // Otherwise, just place the updated item back in the cart with its new ID.
         if (isset($cart[$newCartItemId])) {
              $cart[$newCartItemId]['quantity'] += $item['quantity'];
         } else {
              $cart[$newCartItemId] = $item;
         }
-        
         session()->put('cart', $cart);
-
         return redirect()->route('cart.index')->with('success', 'Giỏ hàng đã được cập nhật thành công!');
     }
 
-    /**
-     * Remove an item from the cart.
-     */
     public function remove(Request $request)
     {
         $request->validate(['id' => 'required|string']);
@@ -133,7 +101,6 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('error', 'Không tìm thấy sản phẩm để xóa.');
     }
 
-    // Hiển thị form checkout
     public function checkoutForm(Request $request)
     {
         $cart = session('cart', []);
@@ -143,11 +110,9 @@ class CartController extends Controller
         $total = array_reduce($cart, function ($carry, $item) {
             return $carry + ($item['price'] * $item['quantity']);
         }, 0);
-
         return view('cart.checkout', compact('cart', 'total'));
     }
 
-    // Xử lý lưu đơn hàng
     public function checkoutSubmit(Request $request)
     {
         $validated = $request->validate([

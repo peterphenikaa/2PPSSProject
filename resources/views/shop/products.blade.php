@@ -235,7 +235,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Accordion functionality
             const filterToggles = document.querySelectorAll('.filter-toggle');
             
             filterToggles.forEach(toggle => {
@@ -245,7 +244,6 @@
                 });
             });
             
-            // Initialize sections to be open if they have checked checkboxes
             document.querySelectorAll('.filter-section').forEach(section => {
                 const hasChecked = section.querySelector('input[type="checkbox"]:checked');
                 if (hasChecked) {
@@ -253,19 +251,16 @@
                 }
             });
             
-            // Price slider styling (fallback for browsers that don't support accent-color)
             const priceSlider = document.querySelector('input[type="range"]');
             if (priceSlider) {
                 priceSlider.addEventListener('input', function() {
                     const value = (this.value - this.min) / (this.max - this.min) * 100;
                     this.style.background = `linear-gradient(to right, #000 0%, #000 ${value}%, #e5e7eb ${value}%, #e5e7eb 100%)`;
                 });
-                
-                // Trigger initial styling
+            
                 priceSlider.dispatchEvent(new Event('input'));
             }
             
-            // Size selection functionality
             document.querySelectorAll('.size-option').forEach(option => {
                 option.addEventListener('click', function() {
                     const checkbox = this.querySelector('input[type="checkbox"]');

@@ -58,7 +58,6 @@ class ProductController
                 break;
         }
 
-        // 2. Áp dụng filter từ request
         if ($request->filled('name')) {
             $query->whereIn('name', $request->input('name'));
         }
@@ -83,27 +82,21 @@ class ProductController
                 }
             });
         }
-
-        // 3. Lấy danh sách sản phẩm
         $products = $query->get();
 
-        // 4. Lấy dữ liệu lọc sidebar từ tất cả sản phẩm
         $all = Product::all();
         $names = $all->pluck('name')->unique()->sort()->values();
         $genders = $all->pluck('gender')->unique()->sort()->values();
         $colorways = $all->pluck('colorway')->unique()->sort()->values();
         $sizes = $all->pluck('available_sizes')->filter()->flatten()->unique()->sort()->values();
-
         return view('shop.products', compact('products', 'filter', 'names', 'genders', 'colorways', 'sizes'));
     }
+
     public function show($id)
 {
     $product = Product::with('images')->findOrFail($id);
-
     $mainImage = $product->image ?? 'default.jpg';
     $additionalImages = $product->images->sortBy('order')->take(4);
-
-    // Lấy ngẫu nhiên 4 sản phẩm khác (không phân biệt category)
     $relatedProducts = Product::where('id', '!=', $product->id)
         ->inRandomOrder()
         ->limit(4)
@@ -117,11 +110,9 @@ class ProductController
     ));
 }
 
-
-
-public function homepageProducts()
+    public function homepageProducts()
     {
-        $newProducts = Product::latest()->take(8)->get(); // Lấy 8 sản phẩm mới nhất
+        $newProducts = Product::latest()->take(8)->get();
         return view('layouts.layouts', compact('newProducts'));
     }
     public function search(Request $request)
@@ -144,7 +135,6 @@ public function homepageProducts()
     {
         $products = Product::where('brand', $brand)->get();
         $filter = $brand;
-        // Lấy dữ liệu lọc sidebar từ tất cả sản phẩm
         $all = Product::all();
         $names = $all->pluck('name')->unique()->sort()->values();
         $genders = $all->pluck('gender')->unique()->sort()->values();
