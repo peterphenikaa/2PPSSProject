@@ -1,9 +1,11 @@
 ### PHẦN 1: TÓM TẮT VỀ WEBSITE
 Bài tập lớn giữa kỳ môn Web nâng cao là một dự án quan trọng nhằm rèn luyện kỹ năng thiết kế và xây dựng một trang web hoàn chỉnh, giải quyết các bài toán thực tiễn hoặc hỗ trợ hoạt động quản lý, kinh doanh như hệ thống bán hàng, quản lý kho, hoặc đặt lịch dịch vụ. Trong bài tập lớn này, quá trình phát triển được bắt đầu bằng việc phân tích yêu cầu, xác định rõ mục tiêu của hệ thống, nhu cầu của người dùng, cũng như các tính năng cần thiết để đáp ứng những yêu cầu đó.
+
 Tiếp theo, chúng em tiến hành thiết kế giao diện với tiêu chí đơn giản, dễ sử dụng và thân thiện với người dùng, sử dụng HTML, CSS kết hợp với framework Tailwind để tối ưu trải nghiệm người dùng. Về mặt xử lý logic và phía server, đồ án sử dụng JavaScript thuần cho tương tác phía client và PHP với framework Laravel cho phần backend. Dữ liệu được lưu trữ và truy xuất hiệu quả thông qua hệ quản trị cơ sở dữ liệu MySQL. 
 
 ### PHẦN 2: GIỚI THIỆU
 Trong bối cảnh thương mại điện tử phát triển mạnh mẽ, đặc biệt là trong ngành thời trang và giày dép, việc sở hữu một website bán hàng chuyên nghiệp là yếu tố quan trọng để doanh nghiệp cạnh tranh và phát triển. Người tiêu dùng hiện đại không chỉ tìm kiếm sự tiện lợi mà còn yêu cầu trải nghiệm mua sắm trực tuyến đơn giản, nhanh chóng và đáng tin cậy. 
+
 Đề tài “Xây dựng trang web bán giày 2PSS Sneaker” được lựa chọn nhằm đáp ứng xu hướng thị trường hiện nay, giúp người dùng dễ dàng tiếp cận sản phẩm, đồng thời hỗ trợ doanh nghiệp quảng bá thương hiệu, mở rộng thị trường và tăng doanh số. Đây là một hướng đi phù hợp, thiết thực và giàu tiềm năng phát triển trong thời đại số hóa. 
 
 ### PHẦN 3: PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG
