@@ -10,7 +10,7 @@ class SearchController extends Controller
     public function index(Request $request)
     {
         $q = $request->input('q');
-        $products = Product::query()
+        $products = Product::with('images')
             ->where('name', 'like', "%$q%")
             ->orWhere('brand', 'like', "%$q%")
             ->orWhere('category', 'like', "%$q%")

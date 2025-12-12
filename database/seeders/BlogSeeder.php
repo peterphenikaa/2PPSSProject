@@ -5,53 +5,123 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Blog;
 use Illuminate\Support\Str;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BlogSeeder extends Seeder
 {
     public function run(): void
     {
-        Blog::insert([
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('blogs')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        $blogs = [
             [
-                'title' => 'Top 5 mẫu sneaker hot nhất 2024',
-                'slug' => Str::slug('Top 5 mẫu sneaker hot nhất 2024'),
-                'content' => '<h2>1. Nike Air Max 97</h2><p>Thiết kế hiện đại, phối màu trẻ trung, phù hợp mọi outfit.</p><h2>2. Adidas Ultraboost 22</h2><p>Êm ái, nhẹ nhàng, cực kỳ phù hợp cho dân chạy bộ.</p><h2>3. Converse Chuck 70</h2><p>Biểu tượng bất tử của giới trẻ, dễ phối đồ.</p><h2>4. Puma RS-X</h2><p>Phong cách retro, cá tính mạnh mẽ.</p><h2>5. Vans Old Skool</h2><p>Đơn giản, chất, không bao giờ lỗi mốt.</p>',
-                'image' => 'nike-x-norblack-norwhite-hero.jpeg',
+                'title' => 'Top 10 Đôi Giày Sneaker Hot Nhất 2025',
+                'content' => '<h2>Khám phá những mẫu sneaker hot nhất</h2><p>Năm 2025 mang đến những thiết kế độc đáo và công nghệ tiên tiến. Từ Nike Air Max đến Adidas Ultraboost, những đôi giày này không chỉ mang lại sự thoải mái mà còn thể hiện phong cách thời trang của bạn.</p>',
                 'status' => 'published',
-                'author_id' => 1,
-                'created_at' => Carbon::now()->subDays(4),
-                'updated_at' => Carbon::now()->subDays(4),
             ],
             [
-                'title' => 'Cách bảo quản giày sneaker luôn như mới',
-                'slug' => Str::slug('Cách bảo quản giày sneaker luôn như mới'),
-                'content' => '<ul><li><strong>Vệ sinh định kỳ:</strong> Dùng bàn chải mềm và dung dịch chuyên dụng.</li><li><strong>Bảo quản nơi khô ráo:</strong> Tránh ánh nắng trực tiếp, độ ẩm cao.</li><li><strong>Nhét giấy báo:</strong> Giữ form giày, hút ẩm tốt.</li><li><strong>Không giặt máy:</strong> Dễ làm hỏng chất liệu và form giày.</li></ul>',
-                'image' => 'faith-kipyegon.jpg',
+                'title' => 'Cách Phối Đồ Với Giày Thể Thao',
+                'content' => '<h2>Hướng dẫn phối đồ streetwear</h2><p>Từ streetwear đến smart casual, giày thể thao có thể kết hợp với nhiều loại trang phục khác nhau để tạo nên những bộ outfit ấn tượng. Áo phông + quần jeans + sneaker trắng là combo kinh điển không bao giờ lỗi mốt.</p>',
                 'status' => 'published',
-                'author_id' => 1,
-                'created_at' => Carbon::now()->subDays(3),
-                'updated_at' => Carbon::now()->subDays(3),
             ],
             [
-                'title' => 'Mix đồ với sneaker: 10 phong cách cực chất',
-                'slug' => Str::slug('Mix đồ với sneaker: 10 phong cách cực chất'),
-                'content' => '<p>Gợi ý phối đồ:</p><ul><li>Áo phông + quần jeans + sneaker trắng</li><li>Áo hoodie + quần jogger + sneaker màu nổi</li><li>Váy ngắn + sneaker cổ cao</li><li>Suit + sneaker trắng (phá cách)</li></ul>',
-                'image' => 'nike-phantom-6-low-2.jpg',
+                'title' => 'Bí Quyết Chọn Size Giày Phù Hợp',
+                'content' => '<h2>Cách đo size chính xác</h2><p>Việc chọn đúng size không chỉ giúp bạn thoải mái khi mang mà còn kéo dài tuổi thọ của đôi giày yêu thích. Hãy đo chân vào buổi chiều khi chân hơi phồng lên để có số đo chính xác nhất.</p>',
                 'status' => 'published',
-                'author_id' => 1,
-                'created_at' => Carbon::now()->subDays(2),
-                'updated_at' => Carbon::now()->subDays(2),
             ],
-            [
-                'title' => 'Lịch sử phát triển của sneaker trên thế giới',
-                'slug' => Str::slug('Lịch sử phát triển của sneaker trên thế giới'),
-                'content' => '<p>Từ những năm 1800, sneaker đã phát triển vượt bậc, trở thành biểu tượng văn hóa toàn cầu. Các thương hiệu lớn như Nike, Adidas, Converse, Puma... đều góp phần tạo nên lịch sử này.</p>',
-                'image' => 'nike-st-flare-1.jpeg',
-                'status' => 'published',
+        ];
+
+        foreach ($blogs as $index => $blogData) {
+            // Tạo ảnh placeholder cho blog
+            $imagePath = $this->createBlogImage($blogData['title'], $index + 1);
+
+            // Upload lên MinIO
+            $fileName = 'blog-' . Str::slug($blogData['title']) . '.jpg';
+            $minioPath = 'blogs/' . $fileName;
+
+            Storage::disk('minio')->put(
+                $minioPath,
+                file_get_contents($imagePath)
+            );
+
+            // Xóa file tạm
+            @unlink($imagePath);
+
+            // Tạo blog
+            Blog::create([
+                'title' => $blogData['title'],
+                'slug' => Str::slug($blogData['title']),
+                'content' => $blogData['content'],
+                'image' => $minioPath,
+                'status' => $blogData['status'],
                 'author_id' => 1,
-                'created_at' => Carbon::now()->subDay(),
-                'updated_at' => Carbon::now()->subDay(),
-            ],
-        ]);
+            ]);
+        }
+
+        $this->command->info('✅ Đã seed 3 bài blog với ảnh lên MinIO!');
     }
-} 
+
+    private function createBlogImage(string $title, int $number): string
+    {
+        // Tạo ảnh 1200x630 (tỉ lệ OG image)
+        $width = 1200;
+        $height = 630;
+
+        $image = imagecreatetruecolor($width, $height);
+
+        // Gradient background colors
+        $gradients = [
+            [[25, 118, 210], [33, 150, 243]], // Blue gradient
+            [[233, 30, 99], [244, 143, 177]],  // Pink gradient
+            [[76, 175, 80], [129, 199, 132]],  // Green gradient
+        ];
+
+        $gradIndex = ($number - 1) % count($gradients);
+
+        // Simple gradient fill
+        for ($i = 0; $i < $height; $i++) {
+            $ratio = $i / $height;
+            $r = (int) ($gradients[$gradIndex][0][0] * (1 - $ratio) + $gradients[$gradIndex][1][0] * $ratio);
+            $g = (int) ($gradients[$gradIndex][0][1] * (1 - $ratio) + $gradients[$gradIndex][1][1] * $ratio);
+            $b = (int) ($gradients[$gradIndex][0][2] * (1 - $ratio) + $gradients[$gradIndex][1][2] * $ratio);
+            $lineColor = imagecolorallocate($image, $r, $g, $b);
+            imageline($image, 0, $i, $width, $i, $lineColor);
+        }
+
+        // Text color
+        $textColor = imagecolorallocate($image, 255, 255, 255);
+
+        // Draw title (wrap text if too long)
+        $fontSize = 5;
+        $maxWidth = 60;
+        $words = explode(' ', $title);
+        $line = '';
+        $y = $height / 2 - 30;
+
+        foreach ($words as $word) {
+            if (strlen($line . $word) > $maxWidth) {
+                $x = ($width - strlen($line) * imagefontwidth($fontSize)) / 2;
+                imagestring($image, $fontSize, $x, $y, $line, $textColor);
+                $line = $word . ' ';
+                $y += 20;
+            } else {
+                $line .= $word . ' ';
+            }
+        }
+
+        if ($line) {
+            $x = ($width - strlen($line) * imagefontwidth($fontSize)) / 2;
+            imagestring($image, $fontSize, $x, $y, $line, $textColor);
+        }
+
+        // Lưu vào file tạm
+        $tempPath = sys_get_temp_dir() . '/blog_' . time() . '_' . $number . '.jpg';
+        imagejpeg($image, $tempPath, 90);
+        imagedestroy($image);
+
+        return $tempPath;
+    }
+}

@@ -84,8 +84,8 @@ class ProductController
             });
         }
 
-        // 3. Lấy danh sách sản phẩm
-        $products = $query->get();
+        // 3. Lấy danh sách sản phẩm với images
+        $products = $query->with('images')->get();
 
         // 4. Lấy dữ liệu lọc sidebar từ tất cả sản phẩm
         $all = Product::all();
@@ -97,31 +97,35 @@ class ProductController
         return view('shop.products', compact('products', 'filter', 'names', 'genders', 'colorways', 'sizes'));
     }
     public function show($id)
-{
-    $product = Product::with('images')->findOrFail($id);
-
-    $mainImage = $product->image ?? 'default.jpg';
-    $additionalImages = $product->images->sortBy('order')->take(4);
-
-    // Lấy ngẫu nhiên 4 sản phẩm khác (không phân biệt category)
-    $relatedProducts = Product::where('id', '!=', $product->id)
-        ->inRandomOrder()
-        ->limit(4)
-        ->get();
-
-    return view('shop.product-items', compact(
-        'product', 
-        'mainImage', 
-        'additionalImages', 
-        'relatedProducts'
-    ));
-}
-
-
-
-public function homepageProducts()
     {
-        $newProducts = Product::latest()->take(8)->get(); // Lấy 8 sản phẩm mới nhất
+        $product = Product::with('images')->findOrFail($id);
+
+        // Lấy ảnh chính (order = 1)
+        $mainImage = $product->images->where('order', 1)->first();
+
+        // Lấy 4 ảnh phụ (order > 1)
+        $additionalImages = $product->images->where('order', '>', 1)->sortBy('order')->take(4);
+
+        // Lấy ngẫu nhiên 4 sản phẩm khác (không phân biệt category)
+        $relatedProducts = Product::with('images')
+            ->where('id', '!=', $product->id)
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
+        return view('shop.product-items', compact(
+            'product',
+            'mainImage',
+            'additionalImages',
+            'relatedProducts'
+        ));
+    }
+
+
+
+    public function homepageProducts()
+    {
+        $newProducts = Product::with('images')->latest()->take(8)->get(); // Lấy 8 sản phẩm mới nhất với images
         return view('layouts.layouts', compact('newProducts'));
     }
     public function search(Request $request)
@@ -132,17 +136,17 @@ public function homepageProducts()
                 ->orWhere('brand', 'like', "%$q%")
                 ->orWhere('category', 'like', "%$q%")
                 ->orWhere('colorway', 'like', "%$q%")
-                ->orWhere('id', 'like', "%$q%") ;
+                ->orWhere('id', 'like', "%$q%");
         })
-        ->latest()
-        ->paginate(10);
+            ->latest()
+            ->paginate(10);
         return view('admin.product', [
             'products' => $products,
         ]);
     }
     public function brandFilter($brand)
     {
-        $products = Product::where('brand', $brand)->get();
+        $products = Product::with('images')->where('brand', $brand)->get();
         $filter = $brand;
         // Lấy dữ liệu lọc sidebar từ tất cả sản phẩm
         $all = Product::all();

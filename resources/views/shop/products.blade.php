@@ -201,12 +201,18 @@
                             <a href="{{ url('/product/' . $product->id) }}" class="block">
     <div class="product-card group border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-300 bg-white hover:border-gray-200">
         <div class="w-full product-image-container bg-gray-50 overflow-hidden">
-            <img 
-                src="{{ asset('images/' . $product->image) }}"
-                alt="{{ $product->name }}"
-                class="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
-                loading="lazy"
-            >
+            @if($product->main_image)
+                <img 
+                    src="{{ $product->main_image->full_url }}"
+                    alt="{{ $product->name }}"
+                    class="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                >
+            @else
+                <div class="w-full h-full bg-gray-100 flex items-center justify-center p-4">
+                    <span class="material-icons-round text-gray-400 text-5xl">image_not_supported</span>
+                </div>
+            @endif
         </div>
         <div class="p-4">
             <h3 class="text-lg font-semibold text-gray-900 mb-1 truncate">{{ $product->name }}</h3>

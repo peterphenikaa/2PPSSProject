@@ -33,8 +33,13 @@
                 <div class="w-full lg:w-1/2">
                     <div class="product-gallery">
                         <!-- Main Image -->
-                        <img src="{{ asset('images/' . $mainImage) }}" alt="{{ $product->name }}" loading="lazy"
-                            class="w-full">
+                        @if($mainImage)
+                            <img src="{{ $mainImage->full_url }}" alt="{{ $product->name }}" loading="lazy"
+                                class="w-full">
+                        @else
+                            <img src="{{ asset('images/default.jpg') }}" alt="{{ $product->name }}" loading="lazy"
+                                class="w-full">
+                        @endif
                     </div>
                 </div>
 
@@ -196,7 +201,7 @@
                 <div class="additional-images-grid">
                     @foreach($additionalImages as $image)
                         <div class="additional-image-item">
-                            <img src="{{ asset('images/' . $image->image_path) }}" alt="Ảnh phụ {{ $product->name }}"
+                            <img src="{{ $image->full_url }}" alt="Ảnh phụ {{ $product->name }}"
                                 loading="lazy">
                         </div>
                     @endforeach
@@ -212,8 +217,13 @@
                             <a href="{{ route('products.show', $related->id) }}" class="product-card block hover:no-underline">
                                 <!-- Main Product Image -->
                                 <div class="bg-gray-100 rounded-lg overflow-hidden mb-2 aspect-square">
-                                    <img src="{{ asset('images/' . ($related->image ?? 'default.jpg')) }}"
-                                        alt="{{ $related->name }}" class="w-full h-full object-cover" loading="lazy">
+                                    @if($related->main_image)
+                                        <img src="{{ $related->main_image->full_url }}"
+                                            alt="{{ $related->name }}" class="w-full h-full object-cover" loading="lazy">
+                                    @else
+                                        <img src="{{ asset('images/default.jpg') }}"
+                                            alt="{{ $related->name }}" class="w-full h-full object-cover" loading="lazy">
+                                    @endif
                                 </div>
 
                                 <!-- Product Info -->
@@ -544,6 +554,6 @@
 
     @section('meta_title', $product->name . ' - 2PSS Sneaker')
     @section('meta_description', Str::limit(strip_tags($product->description), 150))
-    @section('meta_image', asset('images/' . $product->image))
+    @section('meta_image', $mainImage ? $mainImage->full_url : asset('images/default.jpg'))
 </body>
 </html>

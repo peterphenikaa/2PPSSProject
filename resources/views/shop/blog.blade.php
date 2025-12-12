@@ -18,8 +18,7 @@
             <div class="max-w-2xl mx-auto mb-12">
                 <form action="{{ route('shop.blog.index') }}" method="GET" class="relative">
                     <div class="flex shadow-sm rounded-lg">
-                        <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Tìm kiếm bài viết..."
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Tìm kiếm bài viết..."
                             class="flex-1 min-w-0 block w-full px-5 py-3 rounded-l-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
                         <button type="submit"
                             class="inline-flex items-center px-4 py-3 border border-transparent text-sm font-medium rounded-r-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -46,7 +45,7 @@
                             <!-- Featured Image -->
                             <div class="h-56 w-full overflow-hidden">
                                 @if ($blog->image)
-                                    <img src="{{ asset('images/' . $blog->image) }}" alt="{{ $blog->title }}"
+                                    <img src="{{ $blog->image_url }}" alt="{{ $blog->title }}"
                                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                                 @else
                                     <div class="w-full h-full bg-gray-100 flex items-center justify-center">
@@ -119,4 +118,3 @@
 @section('meta_title', 'Blog - 2PSS Sneaker')
 @section('meta_description', 'Tổng hợp các bài viết, tin tức, xu hướng sneaker mới nhất từ 2PSS Sneaker.')
 @section('meta_image', asset('images/anh_main.jpg'))
-

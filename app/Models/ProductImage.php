@@ -22,4 +22,16 @@ class ProductImage extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    /**
+     * Get full URL for the image from MinIO
+     */
+    public function getFullUrlAttribute()
+    {
+        if (!$this->image_path) {
+            return null;
+        }
+
+        return rtrim(config('filesystems.disks.minio.url'), '/') . '/' . ltrim($this->image_path, '/');
+    }
 }

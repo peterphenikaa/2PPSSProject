@@ -17,4 +17,16 @@ class Blog extends Model
         'status',
         'author_id',
     ];
+
+    /**
+     * Get full URL for the blog image from MinIO
+     */
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return null;
+        }
+
+        return rtrim(config('filesystems.disks.minio.url'), '/') . '/' . ltrim($this->image, '/');
+    }
 }
