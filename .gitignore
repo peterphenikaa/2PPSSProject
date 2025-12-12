@@ -21,3 +21,15 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Docker
+docker-compose.override.yml
+/mysql_data
+/minio_data
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
