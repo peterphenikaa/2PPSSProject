@@ -54,14 +54,18 @@ class CreateProductController extends Controller
             $product->available_sizes = explode(',', $validated['available_sizes']);
             $product->save();
 
-            // Upload images lên MinIO
+            // Upload images lên MinIO với folder riêng cho mỗi sản phẩm
+            $productFolder = 'products/product-' . $product->id;
+
             foreach ($request->file('images') as $index => $image) {
-                $imagePath = $this->imageService->upload($image, 'products');
+                $order = $index + 1;
+                $filename = 'image-' . $order . '.' . $image->getClientOriginalExtension();
+                $imagePath = $this->imageService->upload($image, $productFolder, $filename);
 
                 ProductImage::create([
                     'product_id' => $product->id,
                     'image_path' => $imagePath,
-                    'order' => $index + 1, // order từ 1 đến 5
+                    'order' => $order, // order từ 1 đến 5
                 ]);
             }
 

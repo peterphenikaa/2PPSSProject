@@ -103,16 +103,17 @@
                                         <div class="flex text-sm text-gray-600 justify-center">
                                             <label for="images"
                                                 class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none">
-                                                <span>Tải ảnh lên (chọn nhiều)</span>
+                                                <span>📷 Chọn nhiều ảnh</span>
                                                 <input id="images" name="images[]" type="file" class="sr-only"
                                                     accept="image/*" multiple onchange="previewMultipleImages(event)"
                                                     required>
                                             </label>
-                                            <p class="pl-1">hoặc kéo thả tại đây</p>
                                         </div>
-                                        <p class="text-xs text-gray-500">PNG, JPG, JPEG tối đa 5MB mỗi ảnh, tối đa 5 ảnh
+                                        <p class="text-xs text-indigo-600 font-medium mt-2">💡 Giữ phím Ctrl (Windows)
+                                            hoặc Cmd (Mac) để chọn nhiều ảnh cùng lúc</p>
+                                        <p class="text-xs text-gray-500">PNG, JPG, JPEG - tối đa 5MB/ảnh, tối đa 5 ảnh
                                         </p>
-                                        <div id="preview-images-container" class="mt-2 grid grid-cols-5 gap-2"></div>
+                                        <div id="preview-images-multiple" class="mt-4"></div>
                                     </div>
                                 </div>
                             </div>
@@ -246,25 +247,51 @@
             });
         }
 
-        function previewProductImage(event) {
-            const preview = document.getElementById('preview-image-product');
+        function previewMultipleImages(event) {
+            const preview = document.getElementById('preview-images-multiple');
+            if (!preview) return;
+
             preview.innerHTML = '';
-            const file = event.target.files[0];
-            if (file) {
+            const files = event.target.files;
+
+            if (files.length > 5) {
+                alert('Chỉ được chọn tối đa 5 ảnh!');
+                event.target.value = '';
+                return;
+            }
+
+            if (files.length === 0) {
+                return;
+            }
+
+            // Hiển thị số lượng ảnh đã chọn
+            const countDiv = document.createElement('div');
+            countDiv.className = 'text-sm font-semibold text-indigo-600 mb-3';
+            countDiv.innerText = `Đã chọn ${files.length} ảnh (Ảnh đầu tiên là ảnh chính)`;
+            preview.appendChild(countDiv);
+
+            // Container cho preview images
+            const imagesContainer = document.createElement('div');
+            imagesContainer.className = 'grid grid-cols-5 gap-2';
+
+            Array.from(files).forEach((file, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative';
+
                 const img = document.createElement('img');
                 img.src = URL.createObjectURL(file);
-                img.className = 'mx-auto rounded shadow border mt-2';
-                img.style.maxWidth = '120px';
-                img.style.maxHeight = '120px';
-                preview.appendChild(img);
-                // Hiển thị tên file đã chọn
-                const fileName = document.createElement('div');
-                fileName.className = 'text-xs text-gray-600 mt-1';
-                fileName.innerText = 'Đã chọn: ' + file.name;
-                preview.appendChild(fileName);
-            }
-            // Đảm bảo chỉ chọn 1 ảnh
-            event.target.value = event.target.value;
+                img.className = 'w-full h-24 object-cover rounded border shadow-sm';
+
+                const label = document.createElement('div');
+                label.className = 'absolute top-1 left-1 bg-black bg-opacity-60 text-white text-xs px-2 py-0.5 rounded';
+                label.innerText = index === 0 ? 'Chính' : `#${index + 1}`;
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(label);
+                imagesContainer.appendChild(wrapper);
+            });
+
+            preview.appendChild(imagesContainer);
         }
     </script>
 </body>

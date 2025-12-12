@@ -12,18 +12,21 @@ class ImageService
      * 
      * @param \Illuminate\Http\UploadedFile $file
      * @param string $folder (products, blogs, users, etc)
-     * @return string URL của ảnh
+     * @param string|null $filename Tên file tùy chỉnh (không bắt buộc)
+     * @return string Path của ảnh (không phải URL)
      */
-    public static function upload($file, $folder = 'images')
+    public static function upload($file, $folder = 'images', $filename = null)
     {
-        // Tạo tên file unique
-        $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+        // Tạo tên file unique nếu không có filename
+        if (!$filename) {
+            $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+        }
 
         // Upload lên MinIO
         $path = Storage::disk('minio')->putFileAs($folder, $file, $filename);
 
-        // Trả về URL đầy đủ
-        return Storage::disk('minio')->url($path);
+        // Trả về path (không phải URL)
+        return $path;
     }
 
     /**
